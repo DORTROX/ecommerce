@@ -59,9 +59,11 @@ function ProductOverView({ product }) {
   const [responseData, setResponseData] = useState([]);
 
   function addRev(revid, review) {
+    console.log('Product ID', product._id, 'ReviewID', revid )
     axios
       .post("https://ecommerce-dortrox.vercel.app/api/reviews/getReviews", { id: revid })
       .then((response) => {
+        console.log(response)
         response.data.review = review;
         setResponseData((prevData) => [...prevData, response.data]);
       })
@@ -89,7 +91,7 @@ function ProductOverView({ product }) {
           duration: 9000,
           isClosable: true,
         });
-        await setreview("");
+        setreview("");
         addRev(newData.id, newData.review);
       }
       // console.log(Resp)
