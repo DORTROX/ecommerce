@@ -336,7 +336,7 @@ export const getStaticPaths = async () => {
   };
 };
 
-export const getStaticProps = async ({ params: { slug } }) => {
+export const getServerSideProps = async ({params: {slug}}) => {
   const query = `*[_type == "product" && slug.current == '${slug}'][0]`;
 
   const product = await client.fetch(query);
