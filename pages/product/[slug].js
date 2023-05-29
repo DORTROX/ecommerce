@@ -314,28 +314,6 @@ export default function ProductOverView({ product }) {
   );
 }
 
-export const getStaticPaths = async () => {
-  const query = `*[_type == "product"] {
-        slug {
-          current
-        }
-      }
-      `;
-
-  const products = await client.fetch(query);
-
-  const paths = products.map((product) => ({
-    params: {
-      slug: product.slug.current,
-    },
-  }));
-
-  return {
-    paths,
-    fallback: false,
-  };
-};
-
 export const getServerSideProps = async ({params: {slug}}) => {
   const query = `*[_type == "product" && slug.current == '${slug}'][0]`;
 
