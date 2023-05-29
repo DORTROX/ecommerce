@@ -18,7 +18,7 @@ const Layout = ({ children }) => {
       getSession().then(async (session) => {
         if (session == null) return;
         await axios
-          .post("https://e-commerce-next-js-livid.vercel.app/api/userDb/UserInit", {
+          .post("https://ecommerce-dortrox.vercel.app/api/userDb/UserInit", {
             name: session.user.name,
             email: session.user.email,
             image: session.user.image,
