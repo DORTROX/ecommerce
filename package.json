@@ -27,6 +27,7 @@
     "react-dom": "18.2.0",
     "react-hot-toast": "^2.4.1",
     "react-icons": "^4.8.0",
+    "react-loading-skeleton": "^3.3.1",
     "swiper": "^9.2.3",
     "uuid": "^9.0.0"
   }

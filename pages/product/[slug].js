@@ -31,14 +31,25 @@ import { MdOutlineRateReview } from "react-icons/md";
 import { useUserContext } from "@/context/UserSchema";
 import { useToast } from "@chakra-ui/react";
 import axios from "axios";
+// import { useRouter } from "next/router";
 
-function ProductOverView({ product }) {
+export default function ProductOverView({product}) {
+  // const [product, setproduct] = useState()
+  // const router = useRouter();
   const toast = useToast();
+  // const { slug } = router.query;
+  // const query = `*[_type == "product" && slug.current == '${slug}'][0]`;
   const { onAdd, user } = useUserContext();
   const [index, setindex] = useState(0);
   const [trolly, settrolly] = useState(1);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [review, setreview] = useState("");
+  let truncatedContent, isTruncated;
+  product.reviews?.forEach((review) => {
+    addRev(review.id, review.review);
+  });
+  truncatedContent = product.details.slice(0, 150);
+  isTruncated = product.details.length > 5;
 
   function Promotion() {
     return toast({
@@ -48,10 +59,8 @@ function ProductOverView({ product }) {
       isClosable: true,
     });
   }
-  //RANDOMS
   const [showFullContent, setShowFullContent] = useState(false);
-  const truncatedContent = product.details.slice(0, 150);
-  const isTruncated = product.details.length > 5;
+  
 
   const toggleContent = () => {
     setShowFullContent(!showFullContent);
@@ -94,15 +103,8 @@ function ProductOverView({ product }) {
         setreview("");
         addRev(newData.id, newData.review);
       }
-      // console.log(Resp)
     });
   }
-
-  useEffect(() => {
-    product.reviews?.forEach((review) => {
-      addRev(review.id, review.review);
-    });
-  }, [product]);
 
   return (
     <SimpleGrid p={{ base: 0, md: 50 }} gap={5} templateColumns={{ base: "1fr", md: "repeat(2,1fr)" }}>
@@ -334,7 +336,7 @@ export const getStaticPaths = async () => {
 
   return {
     paths,
-    fallback: "blocking",
+    fallback: false,
   };
 };
 
@@ -346,4 +348,3 @@ export const getStaticProps = async ({ params: { slug } }) => {
     props: { product },
   };
 };
-export default ProductOverView;
