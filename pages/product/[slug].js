@@ -33,23 +33,22 @@ import { useToast } from "@chakra-ui/react";
 import axios from "axios";
 // import { useRouter } from "next/router";
 
-export default function ProductOverView({product}) {
-  // const [product, setproduct] = useState()
-  // const router = useRouter();
+export default function ProductOverView({ product }) {
   const toast = useToast();
-  // const { slug } = router.query;
-  // const query = `*[_type == "product" && slug.current == '${slug}'][0]`;
+
   const { onAdd, user } = useUserContext();
   const [index, setindex] = useState(0);
   const [trolly, settrolly] = useState(1);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [review, setreview] = useState("");
   let truncatedContent, isTruncated;
-  product.reviews?.forEach((review) => {
-    addRev(review.id, review.review);
-  });
-  truncatedContent = product.details.slice(0, 150);
-  isTruncated = product.details.length > 5;
+  useEffect(() => {
+    product.reviews?.forEach((review) => {
+      addRev(review.id, review.review);
+    });
+    truncatedContent = product.details.slice(0, 150);
+    isTruncated = product.details.length > 5;
+  }, [product]);
 
   function Promotion() {
     return toast({
@@ -60,7 +59,6 @@ export default function ProductOverView({product}) {
     });
   }
   const [showFullContent, setShowFullContent] = useState(false);
-  
 
   const toggleContent = () => {
     setShowFullContent(!showFullContent);
@@ -68,11 +66,9 @@ export default function ProductOverView({product}) {
   const [responseData, setResponseData] = useState([]);
 
   function addRev(revid, review) {
-    console.log('Product ID', product._id, 'ReviewID', revid )
     axios
       .post("https://ecommerce-dortrox.vercel.app/api/reviews/getReviews", { id: revid })
       .then((response) => {
-        console.log(response)
         response.data.review = review;
         setResponseData((prevData) => [...prevData, response.data]);
       })
@@ -161,9 +157,9 @@ export default function ProductOverView({product}) {
           </Flex>
           <SimpleGrid templateColumns={{ base: "repeat(1fr)", md: "repeat(3, 1fr)" }} py={4} gap={4}>
             <Button
-            onClick={()=> {
-              if (user.name === "Guest") return Promotion()
-            }}
+              onClick={() => {
+                if (user.name === "Guest") return Promotion();
+              }}
               bg={"green"}
               px={4}
               color={"white"}
@@ -176,7 +172,7 @@ export default function ProductOverView({product}) {
             </Button>
             <Button
               onClick={() => {
-                if (user.name === "Guest") return Promotion()
+                if (user.name === "Guest") return Promotion();
                 onAdd(product, trolly, product.slug.current);
               }}
               px={4}
