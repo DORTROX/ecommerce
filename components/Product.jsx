@@ -98,7 +98,6 @@ function ProductAddToCart({ products, tags }) {
                   <Flex mt='1' justifyContent='space-between' alignContent='center'>
                     <Box fontSize='2xl' fontWeight='semibold' as='h4' lineHeight='tight' isTruncated>
                     <Link href={`/product/${product.slug.current}`}>
-
                       {product.name}
                       </Link>
                     </Box>

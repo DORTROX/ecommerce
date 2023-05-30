@@ -3,35 +3,16 @@ import ProductAddToCart from "@/components/Product";
 import { client } from "@/lib/client";
 import { Box, Divider, Button, Center } from "@chakra-ui/react";
 import React, { useState, useMemo, useEffect } from "react";
-import { useRouter } from "next/router";
 
-export default function ProductPage () {
-  const router = useRouter();
+export default function ProductPage ({products, tagsC, tagsD, tagsM}) {
   const [isSorting, setisSorting] = useState("None");
   const [sortedProducts, setsortedProducts] = useState();
   const [pagination, setPagination] = useState(2);
-  const { slug } = router.query;
-  let productsQuery, tagsD, tagsC, tagsM;
-  const designQuery = slug?.match(/Design=([^|]*)/)?.[1].split(",");
-  const colorQuery = slug?.match(/Color=([^|]*)/)?.[1].split(",");
-  const materialQuery = slug?.match(/Material=([^|]*)/)?.[1].split(",");
-  if (slug === "All" || slug == undefined) {
-    productsQuery = `*[_type == "product"] [0...2]`;
-    tagsC = tagsD = tagsM = "";
-  } else {
-    tagsD = designQuery && designQuery.length ? `(${designQuery.map((val) => `"${val}" in tagsD`).join(" || ")})` : "";
-    tagsC = colorQuery && colorQuery.length ? `(${colorQuery.map((val) => `"${val}" in tagsC`).join(" || ")})` : "";
-    tagsM = materialQuery && materialQuery.length ? `(${materialQuery.map((val) => `"${val}" in tagsM`).join(" || ")})` : "";
-    productsQuery = `*[_type == "product" && (${tagsD || tagsC || tagsM})] ${orderQuery}`;
-  }
-  
-
   useEffect(() => {
     return async () => {
-      const products = await client.fetch(productsQuery);
       setsortedProducts(products);
     };
-  }, [slug]);
+  }, [products]);
 
   useMemo(() => {
     if (isSorting === "None") return sortedProducts;
@@ -100,4 +81,28 @@ export default function ProductPage () {
           </Center>
         </Box>
       );
+}
+
+
+
+export const getServerSideProps = async ({params: {slug}}) => {
+  let productsQuery, tagsD, tagsC, tagsM;
+
+  const designQuery = slug?.match(/Design=([^|]*)/)?.[1].split(",");
+      const colorQuery = slug?.match(/Color=([^|]*)/)?.[1].split(",");
+      const materialQuery = slug?.match(/Material=([^|]*)/)?.[1].split(",");  
+      if (slug === "All" || slug == undefined) {
+        productsQuery = `*[_type == "product"] [0...2]`;
+        tagsC = tagsD = tagsM = "";
+      } else {
+        tagsD = designQuery && designQuery.length ? `(${designQuery.map((val) => `"${val}" in tagsD`).join(" || ")})` : "";
+        tagsC = colorQuery && colorQuery.length ? `(${colorQuery.map((val) => `"${val}" in tagsC`).join(" || ")})` : "";
+        tagsM = materialQuery && materialQuery.length ? `(${materialQuery.map((val) => `"${val}" in tagsM`).join(" || ")})` : ""; 
+        productsQuery = `*[_type == "product" && (${tagsD || tagsC || tagsM})]`;
+        console.log(tagsC,tagsD,tagsM)
+      }
+      const products = await client.fetch(productsQuery);
+  return {
+    props : {products, tagsC, tagsD, tagsM}
+  }
 }
