@@ -24,7 +24,6 @@ export default async function updateReview(req, res) {
       return client.patch(slug).set({ reviews: updatedReviews }).commit();
     })
     .then((res) => {
-      console.log("Document Added");
       res.send(200)
     })
     .catch((err) => res.send(err));
