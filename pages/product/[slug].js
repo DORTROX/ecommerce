@@ -41,13 +41,12 @@ export default function ProductOverView({ product }) {
   const [trolly, settrolly] = useState(1);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [review, setreview] = useState("");
-  let truncatedContent, isTruncated;
+  const truncatedContent = product.details.slice(0, 150)
+  const isTruncated = product.details.length > 5
   useEffect(() => {
     product.reviews?.forEach((review) => {
       addRev(review.id, review.review);
     });
-    truncatedContent = product.details.slice(0, 150);
-    isTruncated = product.details.length > 5;
   }, [product]);
 
   function Promotion() {
