@@ -87,6 +87,7 @@ export default function ProductOverView({ product }) {
       review: review,
     };
     axios.post("https://ecommerce-dortrox.vercel.app/api/reviews/updateReview", newData).then(async (Resp) => {
+      console.log(Resp)
       if (Resp.status === 200) {
         onClose();
         toast({

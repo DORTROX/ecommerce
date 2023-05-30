@@ -27,5 +27,5 @@ export default async function updateReview(req, res) {
       console.log("Document Added");
       res.send(200)
     })
-    .catch((err) => res.send(400));
+    .catch((err) => res.send(err));
 }
