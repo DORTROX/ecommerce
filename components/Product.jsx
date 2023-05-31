@@ -44,6 +44,7 @@ function Rating({ rating, numReviews }) {
 }
 
 function ProductAddToCart({ products, tags }) {
+  console.log(tags)
   return (
     <Box my={"2%"} width='100%' display='flex' flexDirection='column' alignItems='center' justifyContent='center' textAlign='center'>
       <HStack spacing={4}>

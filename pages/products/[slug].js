@@ -13,6 +13,7 @@ export default function ProductPage ({products, tagsC, tagsD, tagsM}) {
       setsortedProducts(products);
     };
   }, [products]);
+  console.log(tagsC, tagsD, tagsM)
 
   useMemo(() => {
     if (isSorting === "None") return sortedProducts;
