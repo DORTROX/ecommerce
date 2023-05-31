@@ -4,7 +4,7 @@ import { client } from "@/lib/client";
 import { Box, Divider, Button, Center } from "@chakra-ui/react";
 import React, { useState, useMemo, useEffect } from "react";
 
-export default function ProductPage ({products, tagsC, tagsD, tagsM}) {
+export default function ProductPage ({products, tagsC, tagsD, tagsM, slug}) {
   const [isSorting, setisSorting] = useState("None");
   const [sortedProducts, setsortedProducts] = useState(products);
   const [pagination, setPagination] = useState(2);
@@ -106,6 +106,6 @@ export const getServerSideProps = async ({params: {slug}}) => {
       const products = await client.fetch(productsQuery);
       console.log(products)
   return {
-    props : {products, tagsC, tagsD, tagsM}
+    props : {products, tagsC, tagsD, tagsM, slug}
   }
 }
