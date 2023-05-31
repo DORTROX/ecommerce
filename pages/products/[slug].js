@@ -1,5 +1,6 @@
 import FiltersX from "@/components/FiltersX";
 import ProductAddToCart from "@/components/Product";
+import product from "@/creativewallpapers-dashboard/schemas/product";
 import { client } from "@/lib/client";
 import { Box, Divider, Button, Center } from "@chakra-ui/react";
 import React, { useState, useMemo, useEffect } from "react";
@@ -13,6 +14,7 @@ export default function ProductPage ({products, tagsC, tagsD, tagsM}) {
       setsortedProducts(products);
     };
   }, [products]);
+  console.log(products)
   console.log(tagsC, tagsD, tagsM)
 
   useMemo(() => {
@@ -103,6 +105,7 @@ export const getServerSideProps = async ({params: {slug}}) => {
         console.log(tagsC,tagsD,tagsM)
       }
       const products = await client.fetch(productsQuery);
+      console.log(products)
   return {
     props : {products, tagsC, tagsD, tagsM}
   }
