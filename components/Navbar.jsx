@@ -314,6 +314,6 @@ const NAV_ITEMS = [
   },
   {
     label: "About Us",
-    href: "#aboutus",
+    href: "https://ecommerce-dortrox.vercel.app/#aboutus",
   },
 ];
