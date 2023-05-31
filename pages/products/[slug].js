@@ -6,7 +6,7 @@ import React, { useState, useMemo, useEffect } from "react";
 
 export default function ProductPage ({products, tagsC, tagsD, tagsM}) {
   const [isSorting, setisSorting] = useState("None");
-  const [sortedProducts, setsortedProducts] = useState();
+  const [sortedProducts, setsortedProducts] = useState(products);
   const [pagination, setPagination] = useState(2);
   useEffect(() => {
     return async () => {
