@@ -1,6 +1,5 @@
 import FiltersX from "@/components/FiltersX";
 import ProductAddToCart from "@/components/Product";
-import product from "@/creativewallpapers-dashboard/schemas/product";
 import { client } from "@/lib/client";
 import { Box, Divider, Button, Center } from "@chakra-ui/react";
 import React, { useState, useMemo, useEffect } from "react";
