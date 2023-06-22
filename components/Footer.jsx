@@ -86,16 +86,13 @@
             <Stack align={'flex-start'}>
               <ListHeader>Links</ListHeader>
               <Link href={'https://ecommerce-dortrox.vercel.app/#aboutus'}>About us</Link>
-              <Link href={'#'}>Blog</Link>
+              <Link _disabled={'true'} href={'#'}>Blog</Link>
               <Link href={'#'}>Contact us</Link>
             </Stack>
             <Stack align={'flex-start'}>
               <ListHeader>Support</ListHeader>
-              <Link href={'#'}>Help Center</Link>
-              <Link href={'#'}>Terms of Service</Link>
-              <Link href={'#'}>Legal</Link>
-              <Link href={'#'}>Privacy Policy</Link>
-              <Link href={'#'}>Satus</Link>
+              <Link href={'/user/Toc'}>Terms of Service</Link>
+              <Link href={'/user/Privacy'}>Privacy Policy</Link>
             </Stack>
             <Stack align={'flex-start'}>
               <ListHeader>Stay up to date</ListHeader>
