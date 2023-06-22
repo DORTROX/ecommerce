@@ -14,51 +14,55 @@ const Layout = ({ children }) => {
   const { user, setUser, setCartItems } = useUserContext();
 
   useEffect(() => {
-      AOS.init();
-      getSession().then(async (session) => {
-        if (session == null) return;
-        await axios
-          .post("https://ecommerce-dortrox.vercel.app/api/userDb/UserInit", {
-            name: session.user.name,
-            email: session.user.email,
-            image: session.user.image,
-          })
-          .then(async (Response) => {
-            if (typeof Response.data != Boolean) {
-              let cart = [];
-              Response.data.cartItems?.map(async (item) => {
-                let x = await client.fetch(`*[_type == "product" && slug.current == '${item.slug}'][0]`);
-                if (x) {
-                  x.quantity = item.quantity;
-                  cart.push(x);
-                } else {
-                  //Do nothing
-                }
-              });
-              await setCartItems(cart);
-            }
-            if (user.name == "Guest") {
-              await setUser({
-                ...user,
-                id:  Response.data._id,
-                name: session.user.name,
-                email: session.user.email,
-                image: session.user.image,
-                ordersHistory: Response.data.OrderHistory,
-                City: Response.data.City,
-                pinCode: Response.data.Postal_Code,
-                shippingAddress: Response.data.Shipping_Address,
-                phone: Response.data.phone
-              });
-            }
-          });
-      });
+    AOS.init();
+    getSession().then(async (session) => {
+      if (session == null) return;
+      await axios
+        .post("https://ecommerce-dortrox.vercel.app/api/userDb/UserInit", {
+          name: session.user.name,
+          email: session.user.email,
+          image: session.user.image,
+        })
+        .then(async (Response) => {
+          if (typeof Response.data != Boolean) {
+            let cart = [];
+            Response.data.cartItems?.map(async (item) => {
+              let x = await client.fetch(`*[_type == "product" && slug.current == '${item.slug}'][0]`);
+              if (x) {
+                x.quantity = item.quantity;
+                cart.push(x);
+              } else {
+                //Do nothing
+              }
+            });
+            await setCartItems(cart);
+          }
+          if (user.name == "Guest") {
+            await setUser({
+              ...user,
+              id: Response.data._id,
+              name: session.user.name,
+              email: session.user.email,
+              image: session.user.image,
+              ordersHistory: Response.data.OrderHistory,
+              City: Response.data.City,
+              pinCode: Response.data.Postal_Code,
+              shippingAddress: Response.data.Shipping_Address,
+              phone: Response.data.phone,
+            });
+          }
+        });
+    });
   }, []);
 
   return (
     <div className='main-layout'>
       <Head>
         <title>Creative Wallpapers</title>
+        <meta property='og:title' content='Creative Wallpapers' />
+        <meta property='og:description' content='Beautiful wall covering & much more' />
+        <meta property='og:image' content='/public/Images/Banner.jpg' />
+        <meta property='og:url' content='https://ecommerce-dortrox.vercel.app' />
       </Head>
       <header>
         <Navbar />
