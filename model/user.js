@@ -31,6 +31,35 @@ const userSchema = new mongoose.Schema({
     ],
     default: [],
   },
+  OrderHistory: {
+    type: [
+      {
+        orderId: {
+          type: String,
+        }, paymentMode: {
+          type: String,
+        }, 
+        Delivered: {
+          type: String,
+        },
+        itemId: {
+          type: String,
+        }}
+      ]
+  },
+
+  City: {
+    type: String,
+    default: "",
+  },
+  Postal_Code: {
+    type: String,
+    default: "",
+  },
+  Shipping_Address: {
+    type: String,
+    default: ""
+  }
 }); 
 
 module.exports = mongoose.models.User || mongoose.model("User", userSchema);

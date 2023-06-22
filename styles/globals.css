@@ -178,3 +178,13 @@ swiper-slide img {
   text-shadow: 2px 2px 10px black;
   /* color: #BFA169; */
 }
+
+.nike-card-container {
+  width: 100%;
+  /* white-space: nowrap; */
+}
+
+.nike-card-container > * {
+  flex-shrink: 0;
+}
+

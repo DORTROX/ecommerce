@@ -27,8 +27,12 @@ import {
   Divider,
   Alert,
   AlertIcon,
-  AlertTitle,
-  AlertDescription,
+  Menu,
+  MenuButton,
+  MenuList,
+  Center,
+  MenuDivider,
+  MenuItem
 } from "@chakra-ui/react";
 import { HamburgerIcon, CloseIcon, ChevronDownIcon, ChevronRightIcon } from "@chakra-ui/icons";
 
@@ -123,9 +127,10 @@ export default function WithSubnavigation() {
           />
         </Flex>
         <Flex flex={{ base: 1 }} justify={{ base: "center", md: "start" }}>
-          <Link textDecoration={'none'} href={'/'}><Text textAlign={useBreakpointValue({ base: "center", md: "left" })} fontFamily={"heading"} color={"white"}>
-            Creative Wallpapers
-          </Text>
+          <Link textDecoration={"none"} href={"/"}>
+            <Text textAlign={useBreakpointValue({ base: "center", md: "left" })} fontFamily={"heading"} color={"white"}>
+              Creative Wallpapers
+            </Text>
           </Link>
 
           <Flex display={{ base: "none", md: "flex" }} ml={10}>
@@ -133,7 +138,7 @@ export default function WithSubnavigation() {
           </Flex>
         </Flex>
 
-        <Stack flex={{ base: 1, md: 0 }} justify={"flex-end"} direction={"row"} spacing={6} align={"center"}>
+        <Stack zIndex={5} flex={{ base: 1, md: 0 }} justify={"flex-end"} direction={"row"} spacing={6} align={"center"}>
           <DrawerExample cart={cartItems} func={onRemove} />
           {(() => {
             if (user.name == "Guest") {
@@ -152,7 +157,26 @@ export default function WithSubnavigation() {
                 </Button>
               );
             } else {
-              return <Avatar size={"md"} src={user.image} />;
+              return (
+                <Menu>
+                  <MenuButton as={Button} rounded={"full"} variant={"link"} cursor={"pointer"} minW={0}>
+                    <Avatar size={"md"} src={user.image} />
+                  </MenuButton>
+                  <MenuList alignItems={"center"}>
+                    <br />
+                    <Center>
+                      <Avatar size={"2xl"} src={user.image} />
+                    </Center>
+                    <br />
+                    <Center>
+                      <p>{user.name}</p>
+                    </Center>
+                    <br />
+                    <MenuDivider />
+                    <MenuItem><Link href="/user/Account">Account Settings</Link></MenuItem>
+                  </MenuList>
+                </Menu>
+              );
             }
           })()}
         </Stack>
@@ -289,7 +313,7 @@ const NAV_ITEMS = [
       {
         label: "Order History",
         subLabel: "History of all previous orders",
-        href: "#",
+        href: "/user/Account/#orderHistory",
       },
     ],
   },
@@ -314,6 +338,6 @@ const NAV_ITEMS = [
   },
   {
     label: "About Us",
-    href: "https://ecommerce-dortrox.vercel.app/#aboutus",
+    href: "/#aboutus",
   },
 ];

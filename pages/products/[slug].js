@@ -13,8 +13,6 @@ export default function ProductPage ({products, tagsC, tagsD, tagsM, slug}) {
       setsortedProducts(products);
     };
   }, [products]);
-  console.log(products)
-  console.log(tagsC, tagsD, tagsM)
 
   useMemo(() => {
     if (isSorting === "None") return sortedProducts;
@@ -101,10 +99,8 @@ export const getServerSideProps = async ({params: {slug}}) => {
         tagsC = colorQuery && colorQuery.length ? `(${colorQuery.map((val) => `"${val}" in tagsC`).join(" || ")})` : "";
         tagsM = materialQuery && materialQuery.length ? `(${materialQuery.map((val) => `"${val}" in tagsM`).join(" || ")})` : ""; 
         productsQuery = `*[_type == "product" && (${tagsD || tagsC || tagsM})]`;
-        console.log(tagsC,tagsD,tagsM)
       }
       const products = await client.fetch(productsQuery);
-      console.log(products)
   return {
     props : {products, tagsC, tagsD, tagsM, slug}
   }

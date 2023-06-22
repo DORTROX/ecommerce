@@ -39,11 +39,16 @@ const Layout = ({ children }) => {
             }
             if (user.name == "Guest") {
               await setUser({
+                ...user,
                 id:  Response.data._id,
                 name: session.user.name,
                 email: session.user.email,
-                phone: "",
                 image: session.user.image,
+                ordersHistory: Response.data.OrderHistory,
+                City: Response.data.City,
+                pinCode: Response.data.Postal_Code,
+                shippingAddress: Response.data.Shipping_Address,
+                phone: Response.data.phone
               });
             }
           });

@@ -1,4 +1,4 @@
-const { connectMongo } = require("@/utils/connectMongo");
+const { connectMongo } = require("@/lib/connectMongo");
 import User from "@/model/user";
 
 async function searchUserByEmail(email, slug, quantity) {

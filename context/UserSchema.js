@@ -1,6 +1,5 @@
 import axios from "axios";
 import { useState, createContext, useContext } from "react";
-import { toast } from "react-hot-toast";
 
 const Context = createContext();
 
@@ -11,6 +10,10 @@ export const UserContext = ({ children }) => {
     email: "",
     phone: "",
     image: "",
+    shippingAddress: "",
+    City: "",
+    pinCode: "",
+    ordersHistory: [],
   });
   const [cartItems, setCartItems] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
