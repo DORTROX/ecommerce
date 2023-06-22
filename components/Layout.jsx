@@ -61,7 +61,7 @@ const Layout = ({ children }) => {
         <title>Creative Wallpapers</title>
         <meta property='og:title' content='Creative Wallpapers' />
         <meta property='og:description' content='Beautiful wall covering & much more' />
-        <meta property='og:image' content='./public/Images/Banner.jpg' />
+        <meta property='og:image' content='https://static.vecteezy.com/system/resources/previews/000/701/690/original/abstract-polygonal-banner-background-vector.jpg' />
         <meta property='og:url' content='https://ecommerce-dortrox.vercel.app' />
       </Head>
       <header>
