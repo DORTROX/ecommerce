@@ -146,8 +146,8 @@ export default function AccountSetting() {
           const product = await fetchProductData(order.itemId);
 
           return (
-            <Link href={`/product/${product.slug.current}`}>
-            <Card key={order.itemId} minW={"sm"} maxW={"sm"}>
+            <Link  key={order.itemId} href={`/product/${product.slug.current}`}>
+            <Card minW={"sm"} maxW={"sm"}>
               <CardBody>
                 <Image src={urlFor(product.image[0])} alt='Green double couch with wooden legs' borderRadius='lg' />
                 <Stack mt='6' spacing='3'>
@@ -395,7 +395,7 @@ export default function AccountSetting() {
                             <FormControl onChange={(event) => setPersonalInfo({ ...PersonalInfo, City: event.target.value })}>
                               <Select defaultValue={PersonalInfo.City} placeholder='Select city'>
                                 {states.map((state) => {
-                                  return <option>{state}</option>;
+                                  return <option key={state}>{state}</option>;
                                 })}
                               </Select>
                             </FormControl>
