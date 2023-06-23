@@ -40,7 +40,7 @@ export const UserContext = ({ children }) => {
       setCartItems([...cartItems, { ...product }]);
     }
   
-    await axios.post('https://ecommerce-dortrox.vercel.app/api/userDb/UpdateCart', {
+    await axios.post('https://www.creativewallpapers.work/api/userDb/UpdateCart', {
       email: user.email,
       slug: slug,
       quantity: quantity,
@@ -57,7 +57,7 @@ export const UserContext = ({ children }) => {
       setTotalPrice((prevTotalPrice) => prevTotalPrice - foundProduct.price * foundProduct.quantity);
       setTotalQuantities((prevTotalQuantities) => prevTotalQuantities - foundProduct.quantity);
       setCartItems(newCartItems);
-      await axios.post('https://ecommerce-dortrox.vercel.app/api/userDb/RemoveFromCart', {
+      await axios.post('https://www.creativewallpapers.work/api/userDb/RemoveFromCart', {
         email: user.email,
         slug: slug,
       })

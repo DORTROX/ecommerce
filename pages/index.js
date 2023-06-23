@@ -6,11 +6,11 @@ import Reviews from "@/components/Reviews";
 import { client } from "@/lib/client";
 import { Center, Text, Link, Button } from "@chakra-ui/react";
 
-export default function Home({ featured, HomePageProduct }) {
+export default function Home({ featured, HomePageProduct, HeroBanners }) {
 
   return (
     <>
-      <HeroBanner />
+      <HeroBanner/>
       <Featured props={featured} />
       <Center mt={5}>
         <Text fontSize={"4vh"} fontWeight={"bold"}>
@@ -40,7 +40,7 @@ export default function Home({ featured, HomePageProduct }) {
 }
 
 export const getServerSideProps = async () => {
-  const query = '*[_type == "featured"]';
+  const query = '*[_type == "featured"][0...3]';
   const featured = await client.fetch(query);
 
   const HomePageProductQuery = '*[_type == "product" && isNew == true || _type == "product"][0...4]';

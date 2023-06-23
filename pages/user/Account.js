@@ -113,7 +113,7 @@ export default function AccountSetting() {
   const [isPersonalInfoModalOpen, setPersonalInfoModalOpen] = useState(false);
 
   const UpdateInfo = async () => {
-    await axios.post("https://ecommerce-dortrox.vercel.app/api/userDb/UpdateUserInfo", PersonalInfo).then(async (Resp) => {
+    await axios.post("https://www.creativewallpapers.work/api/userDb/UpdateUserInfo", PersonalInfo).then(async (Resp) => {
       console.log(Resp)
       if (Resp.status === 200) {
         onClose();

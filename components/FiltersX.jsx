@@ -280,7 +280,7 @@ const FiltersX = (props) => {
                   onChange={() => addColorQuery(event.target.value)}
                   value="Turquoise and Coral"
                 >
-                  Turquoi onChange={() => addColorQuery(event.target.value)}se
+                  Turquoise
                   and Coral
                 </Checkbox>
                 <Checkbox
@@ -329,7 +329,7 @@ const FiltersX = (props) => {
                   onChange={() => addColorQuery(event.target.value)}
                   value="Mustard and Maroon"
                 >
-                  Mustard onChange={() => addColorQuery(event.target.value)} and
+                  Mustard and
                   Maroon
                 </Checkbox>
                 <Checkbox
@@ -342,7 +342,7 @@ const FiltersX = (props) => {
                   onChange={() => addColorQuery(event.target.value)}
                   value="Burgundy and Olive"
                 >
-                  Burgund onChange={() => addColorQuery(event.target.value)}y
+                  Burgundy
                   and Olive
                 </Checkbox>
                 <Checkbox
@@ -413,13 +413,6 @@ const FiltersX = (props) => {
                 </Checkbox>
                 <Checkbox
                   onChange={() => addColorQuery(event.target.value)}
-                  value="Burgundy and Mustard"
-                >
-                  Burgund onChange={() => addColorQuery(event.target.value)}y
-                  and Mustard
-                </Checkbox>
-                <Checkbox
-                  onChange={() => addColorQuery(event.target.value)}
                   value="Rust and Beige"
                 >
                   Rust and Beige
@@ -446,7 +439,7 @@ const FiltersX = (props) => {
                   onChange={() => addColorQuery(event.target.value)}
                   value="Mustard and Burgundy"
                 >
-                  Mustard onChange={() => addColorQuery(event.target.value)} and
+                  Mustard and
                   Burgundy
                 </Checkbox>
                 <Checkbox
@@ -465,7 +458,7 @@ const FiltersX = (props) => {
                   onChange={() => addColorQuery(event.target.value)}
                   value="Burgundy and Taupe"
                 >
-                  Burgund onChange={() => addColorQuery(event.target.value)}y
+                  Burgundy
                   and Taupe
                 </Checkbox>
                 <Checkbox

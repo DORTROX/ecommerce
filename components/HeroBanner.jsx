@@ -1,6 +1,6 @@
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Button} from "@chakra-ui/react";
+import { Button, Link} from "@chakra-ui/react";
 
 import "swiper/css";
 import "swiper/css/pagination";
@@ -36,6 +36,7 @@ const HeroBanner = () => {
         >
           <div className="eleme1">
             <h1>Vintage <span style={{color:"#BFA169"}}>Wallpapers</span></h1>
+            <Link href={'/products/Design=Vintage,Ethnic%7CColor=Navy%20and%20Mustard,Burgundy%20and%20Beige,Burgundy%20and%20Mustard,Burgundy%20and%20Gray%7C'}>
             <Button
               px={8}
               bg={"whiteAlpha.900"}
@@ -48,6 +49,7 @@ const HeroBanner = () => {
             >
               View More
             </Button>
+            </Link>
           </div>
         </SwiperSlide>
         <SwiperSlide
@@ -61,6 +63,8 @@ const HeroBanner = () => {
         >
           <div className="eleme1">
             <h1>Embroidered <span style={{color: "#F2B035"}}>Wallpapers</span></h1>
+            <Link href={'/products/Design=Ethnic,Bricks,Wood,Floral,Books%7C'}>
+
             <Button
               px={8}
               bg={"whiteAlpha.900"}
@@ -73,6 +77,7 @@ const HeroBanner = () => {
             >
               View More
             </Button>
+            </Link>
           </div>
         </SwiperSlide>
         <SwiperSlide
@@ -86,6 +91,8 @@ const HeroBanner = () => {
         >
           <div className="eleme1">
             <h1>Abstract <span style={{color:"#F24B6A"}}>Wallpapers</span></h1>
+            <Link href={'/products/Design=3D,Geometric%7C'}>
+
             <Button
               px={8}
               bg={"whiteAlpha.900"}
@@ -98,6 +105,7 @@ const HeroBanner = () => {
             >
               View More
             </Button>
+            </Link>
           </div>
         </SwiperSlide>
         <SwiperSlide
@@ -111,6 +119,8 @@ const HeroBanner = () => {
         >
           <div className="eleme1">
             <h1>Nature And Floral <span style={{color:"#F2F1DF"}}>Wallpapers</span></h1>
+            <Link href={'/products/Design=Flower,Leaves,Floral,Animal,Birds,Wood%7C'}>
+
             <Button
               px={8}
               bg={"whiteAlpha.900"}
@@ -123,6 +133,7 @@ const HeroBanner = () => {
             >
               View More
             </Button>
+            </Link>
           </div>
         </SwiperSlide>
         <SwiperSlide
@@ -136,6 +147,8 @@ const HeroBanner = () => {
         >
           <div className="eleme1">
             <h1>Geometry <span style={{color: "#52F2C5"}}>Wallpaper</span></h1>
+            <Link href={'/products/Design=Geometric%7C'}>
+
             <Button
               px={8}
               bg={"whiteAlpha.900"}
@@ -148,6 +161,7 @@ const HeroBanner = () => {
             >
               View More
             </Button>
+            </Link>
           </div>
         </SwiperSlide>
         <SwiperSlide
@@ -161,6 +175,8 @@ const HeroBanner = () => {
         >
           <div className="eleme1">
             <h1>3 dimensional <span style={{color: "#0FF207"}}>Wallpaper</span></h1>
+            <Link href={'/products/Design=3D%7C'}>
+
             <Button
               px={8}
               bg={"whiteAlpha.900"}
@@ -173,6 +189,7 @@ const HeroBanner = () => {
             >
               View More 
             </Button>
+            </Link>
           </div>
         </SwiperSlide>
       </Swiper>

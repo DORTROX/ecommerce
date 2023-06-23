@@ -66,7 +66,7 @@ export default function ProductOverView({ product }) {
 
   function addRev(revid, review) {
     axios
-      .post("https://ecommerce-dortrox.vercel.app/api/reviews/getReviews", { id: revid })
+      .post("https://www.creativewallpapers.work/api/reviews/getReviews", { id: revid })
       .then((response) => {
         response.data.review = review;
         setResponseData((prevData) => [...prevData, response.data]);
@@ -85,7 +85,7 @@ export default function ProductOverView({ product }) {
       id: user.id,
       review: review,
     };
-    axios.post("https://ecommerce-dortrox.vercel.app/api/reviews/updateReview", newData).then(async (Resp) => {
+    axios.post("https://www.creativewallpapers.work/api/reviews/updateReview", newData).then(async (Resp) => {
       if (Resp.status === 200) {
         onClose();
         toast({

@@ -18,7 +18,7 @@ const Layout = ({ children }) => {
     getSession().then(async (session) => {
       if (session == null) return;
       await axios
-        .post("https://ecommerce-dortrox.vercel.app/api/userDb/UserInit", {
+        .post("https://www.creativewallpapers.work/api/userDb/UserInit", {
           name: session.user.name,
           email: session.user.email,
           image: session.user.image,
@@ -62,7 +62,7 @@ const Layout = ({ children }) => {
         <meta property='og:title' content='Creative Wallpapers' />
         <meta property='og:description' content='Beautiful wall covering & much more' />
         <meta property='og:image' content='https://static.vecteezy.com/system/resources/previews/000/701/690/original/abstract-polygonal-banner-background-vector.jpg' />
-        <meta property='og:url' content='https://ecommerce-dortrox.vercel.app' />
+        <meta property='og:url' content='https://www.creativewallpapers.work' />
       </Head>
       <header>
         <Navbar />

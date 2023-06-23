@@ -85,7 +85,7 @@
             </Stack>
             <Stack align={'flex-start'}>
               <ListHeader>Links</ListHeader>
-              <Link href={'https://ecommerce-dortrox.vercel.app/#aboutus'}>About us</Link>
+              <Link href={'https://www.creativewallpapers.work/#aboutus'}>About us</Link>
               <Link _disabled={'true'} href={'#'}>Blog</Link>
               <Link href={'#'}>Contact us</Link>
             </Stack>
