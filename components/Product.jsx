@@ -45,9 +45,9 @@ function Rating({ rating, numReviews }) {
 
 function ProductAddToCart({ products, tags }) {
   return (
-    <Box my={"2%"} width='100%' display='flex' flexDirection='column' alignItems='center' justifyContent='center' textAlign='center'>
-      <HStack spacing={4}>
-        {(tags != undefined ? tags[0] != 0 || tags[1] != 0 || tags[2] != 0 : false) ? <Text>Tags:</Text> : ""};
+    <Box width='100%' display='flex' flexDirection='column' alignItems='center' justifyContent='center' textAlign='center'>
+      <Box my={2} display={{base:'block',md:'flex'}} gap={3}>
+        {(tags != undefined ? tags[0] != 0 || tags[1] != 0 || tags[2] != 0 : false) ? <Text>Tags:</Text> : ""}
         {tags?.map((tag) => {
           const matches = tag.match(/"([^"]*)"/g);
           return matches?.map((tag) => {
@@ -59,7 +59,7 @@ function ProductAddToCart({ products, tags }) {
             );
           });
         })}
-      </HStack>
+      </Box>
 
       <Grid
         w={"100%"}
