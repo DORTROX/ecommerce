@@ -126,11 +126,9 @@ export default function WithSubnavigation() {
             aria-label={"Toggle Navigation"}
           />
         </Flex>
-        <Flex flex={{ base: 1 }} justify={{ base: "center", md: "start" }}>
+        <Flex flex={{ base: 1 }} justify={{ base: "center", md: "start" }} align={'center'}>
           <Link textDecoration={"none"} href={"/"}>
-            <Text textAlign={useBreakpointValue({ base: "center", md: "left" })} fontFamily={"heading"} color={"white"}>
-              Creative Wallpapers
-            </Text>
+            <Image src='/Images/CreativeWallpapers.png' w={50}/>
           </Link>
 
           <Flex display={{ base: "none", md: "flex" }} ml={10}>
