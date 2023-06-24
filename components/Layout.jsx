@@ -59,9 +59,20 @@ const Layout = ({ children }) => {
     <div className='main-layout'>
       <Head>
         <title>Creative Wallpapers</title>
-        <meta property='og:title' content='Creative Wallpapers' />
-        <meta property='og:description' content='Beautiful wall covering & much more' />
-        <meta property='og:image' content='https://static.vecteezy.com/system/resources/previews/000/701/690/original/abstract-polygonal-banner-background-vector.jpg' />
+        <meta
+          name='description'
+          content='Discover beautiful and high-quality wall coverings at Creative Wallpapers. Explore our wide range of designs, patterns, and textures to transform your space with style and creativity.'
+        />
+        <link rel='icon' type='image/png' href='/Images/CreativeWallpapers.png' />
+        <meta property='og:title' content='Creative Wallpapers | High-Quality Wall Coverings' />
+        <meta
+          property='og:description'
+          content='Discover beautiful and high-quality wall coverings at Creative Wallpapers. Explore our wide range of designs, patterns, and textures to transform your space with style and creativity.'
+        />
+        <meta
+          property='og:image'
+          content='https://static.vecteezy.com/system/resources/previews/000/701/690/original/abstract-polygonal-banner-background-vector.jpg'
+        />
         <meta property='og:url' content='https://www.creativewallpapers.work' />
       </Head>
       <header>
