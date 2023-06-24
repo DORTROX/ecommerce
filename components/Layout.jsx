@@ -71,7 +71,7 @@ const Layout = ({ children }) => {
         />
         <meta
           property='og:image'
-          content='https://static.vecteezy.com/system/resources/previews/000/701/690/original/abstract-polygonal-banner-background-vector.jpg'
+          content='/Images/CreativeWallpapers.png'
         />
         <meta property='og:url' content='https://www.creativewallpapers.work' />
       </Head>
