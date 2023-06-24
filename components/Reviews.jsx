@@ -56,11 +56,10 @@ function TestimonialCard(props) {
   const { name, role, content, avatar, index } = props;
   return (
     <Flex
-    data-aos="fade-up"
       boxShadow={"lg"}
       maxW={"640px"}
+      m={{base: 2, md: 0}}
       direction={{ base: "column-reverse", md: "row" }}
-      width={"full"}
       rounded={"xl"}
       p={10}
       justifyContent={"space-between"}
@@ -93,6 +92,8 @@ function TestimonialCard(props) {
       }}
     >
       <Flex
+    data-aos="fade-up"
+
         direction={"column"}
         textAlign={"left"}
         justifyContent={"space-between"}

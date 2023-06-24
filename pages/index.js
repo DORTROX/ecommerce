@@ -21,6 +21,7 @@ export default function Home({ featured, HomePageProduct, HeroBanners }) {
       <Center>
         <Link href={"/products/All"}>
           <Button
+          my={5}
             px={8}
             bg={"whitesmoke"}
             color={"black"}

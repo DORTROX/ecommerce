@@ -32,7 +32,7 @@ import {
   MenuList,
   Center,
   MenuDivider,
-  MenuItem
+  MenuItem,
 } from "@chakra-ui/react";
 import { HamburgerIcon, CloseIcon, ChevronDownIcon, ChevronRightIcon } from "@chakra-ui/icons";
 
@@ -173,7 +173,9 @@ export default function WithSubnavigation() {
                     </Center>
                     <br />
                     <MenuDivider />
-                    <MenuItem><Link href="/user/Account">Account Settings</Link></MenuItem>
+                    <MenuItem>
+                      <Link href='/user/Account'>Account Settings</Link>
+                    </MenuItem>
                   </MenuList>
                 </Menu>
               );
@@ -334,7 +336,9 @@ const NAV_ITEMS = [
   },
   {
     label: "Contact Us",
-    href: "tel:+918800179641",
+    children: [{ label: "Phone", subLabel: "Make a phone call today!", href: "tel:+918800179641" },
+  {label: "Email", subLabel: "Write us a email", href:"mailto:creativewallsstudio@gmail.com"},
+{label: "Visit Us", subLabel: "Visit our store!", href: "https://www.google.co.uk/maps/place/Creative+wallpapers/@28.6805357,77.1441707,17z/data=!3m1!4b1!4m6!3m5!1s0x390d03f5151a7011:0x99d05133a9d7b68e!8m2!3d28.680531!4d77.146751!16s%2Fg%2F11rr795lc7?entry=ttu"}],
   },
   {
     label: "About Us",
