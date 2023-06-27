@@ -24,6 +24,7 @@ import {
   ModalBody,
   ModalFooter,
   Textarea,
+  Link
 } from "@chakra-ui/react";
 import { BsStar, BsStarFill, BsStarHalf, BsCartPlusFill } from "react-icons/bs";
 import { AiOutlineShoppingCart, AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
