@@ -12,7 +12,6 @@ import {
   Popover,
   PopoverTrigger,
   PopoverContent,
-  useBreakpointValue,
   useDisclosure,
   Drawer,
   DrawerBody,
@@ -33,6 +32,7 @@ import {
   Center,
   MenuDivider,
   MenuItem,
+  useToast,
 } from "@chakra-ui/react";
 import { HamburgerIcon, CloseIcon, ChevronDownIcon, ChevronRightIcon } from "@chakra-ui/icons";
 
@@ -40,11 +40,76 @@ import { FiShoppingCart } from "react-icons/fi";
 import React from "react";
 import { useUserContext } from "@/context/UserSchema";
 import { urlFor } from "@/lib/client";
+import axios from "axios";
+import { signOut } from "next-auth/react";
 
-function DrawerExample({ cart, func }) {
+function DrawerExample({ func }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = React.useRef();
-  const { user } = useUserContext();
+  const { user, cartItems, setTotalPrice, totalPrice, successPayemnt } = useUserContext();
+  const toast = useToast();
+
+  if (isOpen) {
+    setTotalPrice(cartItems && cartItems.reduce((total, item) => total + item.price * item.quantity, 0));
+  }
+
+  const makePayment = async () => {
+    if (user.shippingAddress == "" || user.pinCode == ""  || user.City == "") {
+      return toast({
+        title: (
+          <Text>Complete Your profile before filling order <Link href={'/user/Account'}>Click here</Link></Text>
+        ),
+        status: "error",
+        duration: 9000,
+        isClosable: false
+      })
+    }
+    onClose();
+    await initializeRazorpay();
+    const data = await axios
+      .post("/api/Payment/GenerateOrders", {
+        amount: totalPrice,
+      })
+      .then((t) => t.data);
+    const options = {
+      key: process.env.RAZORPAY_KEY,
+      amount: data.amount,
+      currency: data.currency,
+      description: "By this your order will be confirmed",
+      order_id: data.id,
+      handler: async function (response) {
+        await successPayemnt(
+          response.razorpay_payment_id,
+          cartItems.map((item) => ({ id: item._id, quantity: item.quantity }))
+        );
+        toast({
+          title: "Your order has been filled successfully!",
+          status: "success",
+          duration: 9000,
+          isClosable: true,
+        });
+      },
+    };
+    const paymentObject = new window.Razorpay(options);
+    paymentObject.open();
+  };
+
+  const initializeRazorpay = () => {
+    return new Promise((resolve) => {
+      const script = document.createElement("script");
+      script.src = "https://checkout.razorpay.com/v1/checkout.js";
+      // document.body.appendChild(script);
+
+      script.onload = () => {
+        resolve(true);
+      };
+      script.onerror = () => {
+        resolve(false);
+      };
+
+      document.body.appendChild(script);
+    });
+  };
 
   return (
     <>
@@ -66,8 +131,8 @@ function DrawerExample({ cart, func }) {
             ) : (
               <>
                 <Input placeholder='Type here...' />
-                {cart &&
-                  cart.map((item) => (
+                {cartItems &&
+                  cartItems.map((item) => (
                     <Box key={item?.name} py={4}>
                       <SimpleGrid alignItems='center' templateColumns='repeat(3, 1fr)'>
                         <Image borderRadius='10%' w='50%' src={urlFor(item?.image[0])} />
@@ -89,11 +154,22 @@ function DrawerExample({ cart, func }) {
             )}
           </DrawerBody>
 
-          <DrawerFooter>
-            <Button variant='outline' mr={3} onClick={onClose}>
-              Cancel
-            </Button>
-            <Button colorScheme='blue'>Save</Button>
+          <DrawerFooter bgColor={"#071429"}>
+            <Box w={"full"}>
+              <Box display={"flex"} justifyContent={"space-around"}>
+                <Text>Total: </Text>
+                <Text>{totalPrice}</Text>
+              </Box>
+              <Divider my={2} />
+              <Box display={"flex"} justifyContent={"flex-end"}>
+                <Button variant='outline' mr={3} onClick={onClose}>
+                  Cancel
+                </Button>
+                <Button onClick={makePayment} colorScheme='blue'>
+                  Buy Now
+                </Button>
+              </Box>
+            </Box>
           </DrawerFooter>
         </DrawerContent>
       </Drawer>
@@ -102,7 +178,7 @@ function DrawerExample({ cart, func }) {
 }
 
 export default function WithSubnavigation() {
-  const { user, cartItems, onRemove } = useUserContext();
+  const { user, onRemove } = useUserContext();
 
   const { isOpen, onToggle } = useDisclosure();
 
@@ -126,9 +202,9 @@ export default function WithSubnavigation() {
             aria-label={"Toggle Navigation"}
           />
         </Flex>
-        <Flex flex={{ base: 1 }} justify={{ base: "center", md: "start" }} align={'center'}>
+        <Flex flex={{ base: 1 }} justify={{ base: "center", md: "start" }} align={"center"}>
           <Link textDecoration={"none"} href={"/"}>
-            <Image src='/Images/CreativeWallpapers.png' w={50}/>
+            <Image src='/Images/CreativeWallpapers.png' w={50} />
           </Link>
 
           <Flex display={{ base: "none", md: "flex" }} ml={10}>
@@ -137,7 +213,7 @@ export default function WithSubnavigation() {
         </Flex>
 
         <Stack zIndex={5} flex={{ base: 1, md: 0 }} justify={"flex-end"} direction={"row"} spacing={6} align={"center"}>
-          <DrawerExample cart={cartItems} func={onRemove} />
+          <DrawerExample func={onRemove} />
           {(() => {
             if (user.name == "Guest") {
               return (
@@ -173,6 +249,14 @@ export default function WithSubnavigation() {
                     <MenuDivider />
                     <MenuItem>
                       <Link href='/user/Account'>Account Settings</Link>
+                    </MenuItem>
+                    {user.email == "creativewallsstudio@gmail.com" ? (
+                      <MenuItem>
+                        <Link href='/admin/Hub'>Admin Panel</Link>
+                      </MenuItem>
+                    ) : null}
+                    <MenuItem>
+                      <Button onClick={signOut}>Sign Out</Button>
                     </MenuItem>
                   </MenuList>
                 </Menu>
@@ -334,9 +418,15 @@ const NAV_ITEMS = [
   },
   {
     label: "Contact Us",
-    children: [{ label: "Phone", subLabel: "Make a phone call today!", href: "tel:+918800179641" },
-  {label: "Email", subLabel: "Write us a email", href:"mailto:creativewallsstudio@gmail.com"},
-{label: "Visit Us", subLabel: "Visit our store!", href: "https://www.google.co.uk/maps/place/Creative+wallpapers/@28.6805357,77.1441707,17z/data=!3m1!4b1!4m6!3m5!1s0x390d03f5151a7011:0x99d05133a9d7b68e!8m2!3d28.680531!4d77.146751!16s%2Fg%2F11rr795lc7?entry=ttu"}],
+    children: [
+      { label: "Phone", subLabel: "Make a phone call today!", href: "tel:+918800179641" },
+      { label: "Email", subLabel: "Write us a email", href: "mailto:creativewallsstudio@gmail.com" },
+      {
+        label: "Visit Us",
+        subLabel: "Visit our store!",
+        href: "https://www.google.co.uk/maps/place/Creative+wallpapers/@28.6805357,77.1441707,17z/data=!3m1!4b1!4m6!3m5!1s0x390d03f5151a7011:0x99d05133a9d7b68e!8m2!3d28.680531!4d77.146751!16s%2Fg%2F11rr795lc7?entry=ttu",
+      },
+    ],
   },
   {
     label: "About Us",

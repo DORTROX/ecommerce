@@ -16,7 +16,7 @@ const userSchema = new mongoose.Schema({
   },
   image: {
     type: String,
-    required: true
+    required: true,
   },
   cartItems: {
     type: [
@@ -36,16 +36,23 @@ const userSchema = new mongoose.Schema({
       {
         orderId: {
           type: String,
-        }, paymentMode: {
+        },
+        paymentMode: {
           type: String,
-        }, 
+        },
         Delivered: {
           type: String,
         },
         itemId: {
-          type: String,
-        }}
-      ]
+          type: [
+            {
+              id: String,
+              quantity: Number
+            },
+          ],
+        },
+      },
+    ],
   },
 
   City: {
@@ -58,8 +65,8 @@ const userSchema = new mongoose.Schema({
   },
   Shipping_Address: {
     type: String,
-    default: ""
-  }
-}); 
+    default: "",
+  },
+});
 
 module.exports = mongoose.models.User || mongoose.model("User", userSchema);

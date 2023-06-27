@@ -43,7 +43,7 @@ import { FcGoogle } from "react-icons/fc";
   
   export default function JoinOurTeam() {
     async function handleGoogleAuth () {
-        signIn('google', {callbackUrl: 'https://www.creativewallpapers.work'})
+        signIn('google', {callbackUrl: '/'})
       }
     return (
       <Box position={'relative'}>

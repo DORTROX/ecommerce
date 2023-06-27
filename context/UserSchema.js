@@ -14,15 +14,24 @@ export const UserContext = ({ children }) => {
     City: "",
     pinCode: "",
     ordersHistory: [],
+    access: false,
   });
   const [cartItems, setCartItems] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
-  const [totalQuantities, setTotalQuantities] = useState(0);
+
+  const successPayemnt = async (orderId, itemId) => {
+    setTotalPrice(0)
+    setCartItems([])
+    await axios.post('/api/userDb/updateOrderHistory', {
+      orderId: orderId,
+      itemId: itemId,
+      user
+    })
+  }
 
   const onAdd = async (product, quantity, slug) => {
     const checkProductInCart = cartItems.find((item) => item._id === product._id);
     setTotalPrice((prevTotalPrice) => prevTotalPrice + product.price * quantity);
-    setTotalQuantities((prevTotalQuantities) => prevTotalQuantities + quantity);
   
     if (checkProductInCart) {
       const updatedCartItems = cartItems.map((cartProduct) => {
@@ -40,7 +49,7 @@ export const UserContext = ({ children }) => {
       setCartItems([...cartItems, { ...product }]);
     }
   
-    await axios.post('https://www.creativewallpapers.work/api/userDb/UpdateCart', {
+    await axios.post('/api/userDb/UpdateCart', {
       email: user.email,
       slug: slug,
       quantity: quantity,
@@ -55,9 +64,8 @@ export const UserContext = ({ children }) => {
       const newCartItems = cartItems.filter((item) => item._id !== product._id);
 
       setTotalPrice((prevTotalPrice) => prevTotalPrice - foundProduct.price * foundProduct.quantity);
-      setTotalQuantities((prevTotalQuantities) => prevTotalQuantities - foundProduct.quantity);
       setCartItems(newCartItems);
-      await axios.post('https://www.creativewallpapers.work/api/userDb/RemoveFromCart', {
+      await axios.post('/api/userDb/RemoveFromCart', {
         email: user.email,
         slug: slug,
       })
@@ -74,12 +82,10 @@ export const UserContext = ({ children }) => {
     if (value === "inc") {
       setCartItems([...newCartItems, { ...foundProduct, quantity: foundProduct.quantity + 1 }]);
       setTotalPrice((prevTotalPrice) => prevTotalPrice + foundProduct.price);
-      setTotalQuantities((prevTotalQuantities) => prevTotalQuantities + 1);
     } else if (value === "dec") {
       if (foundProduct.quantity > 1) {
         setCartItems([...newCartItems, { ...foundProduct, quantity: foundProduct.quantity - 1 }]);
         setTotalPrice((prevTotalPrice) => prevTotalPrice - foundProduct.price);
-        setTotalQuantities((prevTotalQuantities) => prevTotalQuantities - 1);
       }
     }
   };
@@ -94,8 +100,9 @@ export const UserContext = ({ children }) => {
         onRemove,
         cartItems,
         totalPrice,
-        totalQuantities,
         setCartItems,
+        setTotalPrice,
+        successPayemnt
       }}>
       {children}
     </Context.Provider>

@@ -10,15 +10,16 @@ import { getSession } from "next-auth/react";
 import { useUserContext } from "@/context/UserSchema";
 import { client } from "@/lib/client";
 
+
 const Layout = ({ children }) => {
-  const { user, setUser, setCartItems } = useUserContext();
+  const { user, setUser, setCartItems} = useUserContext();
 
   useEffect(() => {
     AOS.init();
     getSession().then(async (session) => {
       if (session == null) return;
       await axios
-        .post("https://www.creativewallpapers.work/api/userDb/UserInit", {
+        .post("/api/userDb/UserInit", {
           name: session.user.name,
           email: session.user.email,
           image: session.user.image,
@@ -32,10 +33,10 @@ const Layout = ({ children }) => {
                 x.quantity = item.quantity;
                 cart.push(x);
               } else {
-                //Do nothing
+                //Do nothings
               }
             });
-            await setCartItems(cart);
+            setCartItems(cart);
           }
           if (user.name == "Guest") {
             await setUser({
@@ -49,6 +50,7 @@ const Layout = ({ children }) => {
               pinCode: Response.data.Postal_Code,
               shippingAddress: Response.data.Shipping_Address,
               phone: Response.data.phone,
+              access: session.user.email == "creativewallsstudio@gmail.com"
             });
           }
         });
@@ -73,7 +75,7 @@ const Layout = ({ children }) => {
           property='og:image'
           content='/Images/CreativeWallpapers.png'
         />
-        <meta property='og:url' content='https://www.creativewallpapers.work' />
+        <meta property='og:url' content='/' />
       </Head>
       <header>
         <Navbar />

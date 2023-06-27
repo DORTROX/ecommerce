@@ -46,7 +46,7 @@ import { useState, useEffect } from "react";
 // import { toast } from "react-hot-toast";
 
 const fetchProductData = async (itemId) => {
-  const query = `*[_type == "product" && slug.current == '${itemId}'][0]`;
+  const query = `*[_type == "product" && _id == '${itemId}'][0]`;
   const product = await client.fetch(query);
   return product;
 };
@@ -113,8 +113,7 @@ export default function AccountSetting() {
   const [isPersonalInfoModalOpen, setPersonalInfoModalOpen] = useState(false);
 
   const UpdateInfo = async () => {
-    await axios.post("https://www.creativewallpapers.work/api/userDb/UpdateUserInfo", PersonalInfo).then(async (Resp) => {
-      console.log(Resp)
+    await axios.post("/api/userDb/UpdateUserInfo", PersonalInfo).then(async (Resp) => {
       if (Resp.status === 200) {
         onClose();
         setPersonalInfoModalOpen(false);
@@ -143,29 +142,35 @@ export default function AccountSetting() {
     const fetchOrderCards = async () => {
       const cards = await Promise.all(
         user.ordersHistory?.map(async (order) => {
-          const product = await fetchProductData(order.itemId);
-
-          return (
-            <Link  key={order.itemId} href={`/product/${product.slug.current}`}>
-            <Card minW={"sm"} maxW={"sm"}>
-              <CardBody>
-                <Image src={urlFor(product.image[0])} alt='Green double couch with wooden legs' borderRadius='lg' />
-                <Stack mt='6' spacing='3'>
-                  <Heading size='md'>{product.name}</Heading>
-                  <Text>{product.details.slice(0, 40)}...</Text>
-                  <Text color='blue.600' fontSize='2xl'>
-                    Rs. {product.price}
-                  </Text>
-                </Stack>
-              </CardBody>
-            </Card>
-            </Link>
+          const items = await Promise.all(
+            order.itemId.map(async (item) => {
+              const product = await fetchProductData(item.id);
+              return (
+                <Link key={item} href={`/product/${product.slug.current}`}>
+                  <Card minW={"sm"} maxW={"sm"}>
+                    <CardBody>
+                      <Image src={urlFor(product.image[0])} alt='Green double couch with wooden legs' borderRadius='lg' />
+                      <Stack mt='6' spacing='3'>
+                        <Heading size='md'>{product.name}</Heading>
+                        <Text>{product.details.slice(0, 40)}...</Text>
+                        <Text color='blue.600' fontSize='2xl'>
+                          Rs. {product.price}
+                        </Text>
+                      </Stack>
+                    </CardBody>
+                  </Card>
+                </Link>
+              );
+            })
           );
+    
+          return items;
         })
       );
-
-      setOrderCards(cards);
+    
+      setOrderCards(cards.flat());
     };
+    
 
     fetchOrderCards();
   }, [user]);
