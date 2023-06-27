@@ -99,7 +99,7 @@ export default function Simple() {
                             <option value='Not Delivered'>Not Delivered</option>
                           </Select>
                         </Td>
-                        <Td>{payments.created_at}</Td>
+                        <Td>{new Date(payments.created_at).toLocaleString()}</Td>
                       </Tr>
                     );
                   })
