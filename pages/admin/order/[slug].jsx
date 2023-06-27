@@ -145,7 +145,7 @@ export default function BasicStatistics({ order, paymentDetails, users }) {
       setOrderCards(matchingItemIds);
     };
     FetchProducts();
-  }, []);
+  });
 
   return (
     <Box maxW='7xl' mx={"auto"} my={10} px={{ base: 2, sm: 12, md: 17 }}>
