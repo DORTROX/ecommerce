@@ -43,7 +43,7 @@ const fetchProductData = async (itemId) => {
 export default function BasicStatistics({ order, paymentDetails, users }) {
   const { user } = useUserContext();
   const [orderCards, setOrderCards] = useState([]);
-  const toast = useToast()
+  const toast = useToast();
   const updatePayments = async (payId, value) => {
     const response = await axios.post("/api/Payment/UpdatePaymentStatus", {
       id: payId,
@@ -61,13 +61,7 @@ export default function BasicStatistics({ order, paymentDetails, users }) {
   function StatsCard(props) {
     const { title, stat, icon } = props;
     return (
-      <Stat
-        px={{ base: 2, md: 4 }}
-        py={"5"}
-        shadow={"xl"}
-        border={"1px solid"}
-        borderColor={"gray.500"}
-        rounded={"lg"}>
+      <Stat px={{ base: 2, md: 4 }} py={"5"} shadow={"xl"} border={"1px solid"} borderColor={"gray.500"} rounded={"lg"}>
         <Flex justifyContent={"space-between"}>
           <Box pl={{ base: 2, md: 4 }}>
             <StatLabel fontWeight={"medium"} isTruncated>
@@ -77,7 +71,7 @@ export default function BasicStatistics({ order, paymentDetails, users }) {
               {stat}
             </StatNumber>
           </Box>
-          <Box my={"auto"} color={ "gray.200"} alignContent={"center"}>
+          <Box my={"auto"} color={"gray.200"} alignContent={"center"}>
             {icon}
           </Box>
         </Flex>
@@ -86,14 +80,14 @@ export default function BasicStatistics({ order, paymentDetails, users }) {
   }
   useEffect(() => {
     const FetchProducts = async () => {
-      console.log('hi')
+      console.log("hi");
       const matchingOrder = users.OrderHistory.find((orders) => orders.orderId === order.orderId);
       const matchingItemIds = await Promise.all(
         matchingOrder.itemId.map(async (item) => {
           const product = await fetchProductData(item.id);
           return (
             <Box
-            key={item.id}
+              key={item.id}
               my={4}
               role={"group"}
               p={6}
@@ -176,14 +170,7 @@ export default function BasicStatistics({ order, paymentDetails, users }) {
           </SimpleGrid>
 
           <SimpleGrid columns={{ base: 1, md: 2 }} spacing={{ base: 5, lg: 8 }}>
-            <Box
-              maxH={"70vh"}
-              border={"1px solid"}
-              borderColor={"gray.500"}
-              px={{ base: 2, md: 4 }}
-              py={"5"}
-              shadow={"xl"}
-              rounded={"lg"}>
+            <Box maxH={"70vh"} border={"1px solid"} borderColor={"gray.500"} px={{ base: 2, md: 4 }} py={"5"} shadow={"xl"} rounded={"lg"}>
               <Heading textAlign={"center"}>Personal Information</Heading>
               <Divider my={4} />
 
@@ -219,20 +206,16 @@ export default function BasicStatistics({ order, paymentDetails, users }) {
                       </Tr>
                       <Tr>
                         <Td>Full Address</Td>
-                        <Td>{users.Shipping_Address}</Td>
+                        <Td>
+                          <Box wordBreak='break-word'>{users.Shipping_Address}</Box>
+                        </Td>
                       </Tr>
                     </Tbody>
                   </Table>
                 </TableContainer>
               </Box>
             </Box>
-            <Box
-              border={"1px solid"}
-              borderColor={"gray.500"}
-              px={{ base: 2, md: 4 }}
-              py={"5"}
-              shadow={"xl"}
-              rounded={"lg"}>
+            <Box border={"1px solid"} borderColor={"gray.500"} px={{ base: 2, md: 4 }} py={"5"} shadow={"xl"} rounded={"lg"}>
               <Heading textAlign={"center"}>Order</Heading>
               <Divider my={4} />
               <SimpleGrid columns={{ base: 1, md: 2 }} gap={4}>

@@ -31,18 +31,76 @@ import { MdOutlineRateReview } from "react-icons/md";
 import { useUserContext } from "@/context/UserSchema";
 import { useToast } from "@chakra-ui/react";
 import axios from "axios";
-// import { useRouter } from "next/router";
 
 export default function ProductOverView({ product }) {
   const toast = useToast();
+  
 
-  const { onAdd, user } = useUserContext();
+  const { onAdd, user, successPayemnt } = useUserContext();
   const [index, setindex] = useState(0);
   const [trolly, settrolly] = useState(1);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [review, setreview] = useState("");
   const truncatedContent = product.details.slice(0, 150)
   const isTruncated = product.details.length > 5
+  const makePayment = async (totalPrice, productId) => {
+    if (user.shippingAddress == "" || user.pinCode == ""  || user.City == "") {
+      return toast({
+        title: (
+          <Text>Complete Your profile before filling order <Link href={'/user/Account'}>Click here</Link></Text>
+        ),
+        status: "error",
+        duration: 9000,
+        isClosable: false
+      })
+    }
+    onClose();
+    await initializeRazorpay();
+    const data = await axios
+      .post("/api/Payment/GenerateOrders", {
+        amount: totalPrice,
+      })
+      .then((t) => t.data);
+    const options = {
+      key: process.env.RAZORPAY_KEY,
+      amount: data.amount,
+      currency: data.currency,
+      description: "By this your order will be confirmed",
+      order_id: data.id,
+      handler: async function (response) {
+        await successPayemnt(
+          response.razorpay_payment_id,
+          [{id: productId, quantity: 1}],
+          true
+        );
+        toast({
+          title: "Your order has been filled successfully!",
+          status: "success",
+          duration: 9000,
+          isClosable: true,
+        });
+      },
+    };
+    const paymentObject = new window.Razorpay(options);
+    paymentObject.open();
+  };
+
+  const initializeRazorpay = () => {
+    return new Promise((resolve) => {
+      const script = document.createElement("script");
+      script.src = "https://checkout.razorpay.com/v1/checkout.js";
+      // document.body.appendChild(script);
+
+      script.onload = () => {
+        resolve(true);
+      };
+      script.onerror = () => {
+        resolve(false);
+      };
+
+      document.body.appendChild(script);
+    });
+  };
   useEffect(() => {
     product.reviews?.forEach((review) => {
       addRev(review.id, review.review);
@@ -157,7 +215,7 @@ export default function ProductOverView({ product }) {
           <SimpleGrid templateColumns={{ base: "repeat(1fr)", md: "repeat(3, 1fr)" }} py={4} gap={4}>
             <Button
               onClick={() => {
-                if (user.name === "Guest") return Promotion();
+                makePayment(product.price, product._id)
               }}
               bg={"green"}
               px={4}

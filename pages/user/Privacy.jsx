@@ -4,7 +4,7 @@ const Privacy = () => {
   return (
     <Box m={10} px={{ base: 0, md: "20%" }}>
       <Box>
-        <Heading>Terms and Conditions</Heading>
+        <Heading>Privacy and Policy</Heading>
         <Text mx={3} my={2}>
           Updated at 2023-06-23
         </Text>

@@ -2,7 +2,7 @@ import { Text, Heading, Box, Divider, ListItem, UnorderedList } from "@chakra-ui
 import { InfoOutlineIcon } from "@chakra-ui/icons";
 const Toc = () => {
   return (
-    <Box m={10} px={{base: 0, md: '20%'}}>
+    <Box m={10} px={{ base: 0, md: "20%" }}>
       <Box>
         <Heading>Terms and Conditions</Heading>
         <Text mx={3} my={2}>
@@ -95,15 +95,36 @@ const Toc = () => {
           </UnorderedList>
         </Box>
         <Divider my={4} />
+        <Box>
+          <Heading>Cancellation Policy</Heading>
+          <UnorderedList m={5} spacing={2}>
+            <ListItem>Once an order or reservation is placed, it is considered final and cannot be canceled or refunded.</ListItem>
+            <ListItem>All sales are final, and no cancellations will be accepted under any circumstances.</ListItem>
+            <ListItem>We do not offer any refunds or credits for canceled orders or reservations.</ListItem>
+            <ListItem>
+              Customers are responsible for carefully reviewing and confirming their orders or reservations before making a purchase.
+            </ListItem>
+            <ListItem>
+              In the event of unforeseen circumstances or issues beyond our control that result in the cancellation of an order or
+              reservation, we will work with the customer to find an alternative solution or provide a suitable substitute if available.
+            </ListItem>
+            <ListItem>
+              Changes to an order or reservation may be considered on a case-by-case basis, subject to our discretion. Additional charges or
+              fees may apply for any modifications made.
+            </ListItem>
+          </UnorderedList>
+        </Box>
+        <Divider my={4} />
 
         <Box>
-          <Heading>Returns and Refunds</Heading>
+          <Heading>Returns, Refunds and Cancellation </Heading>
           <UnorderedList m={5} spacing={2}>
             <ListItem>
               We strive to ensure that our products are of the highest quality and meet your expectations. If, however, you receive a
               damaged or defective product, please contact us within [number of days] days of receiving the item.
             </ListItem>
             <ListItem>We do not accept returns or provide refunds for products unless they are damaged or defective.</ListItem>
+            <ListItem>We do not accept cancellation.</ListItem>
             <ListItem>
               To request a return or refund, please provide us with detailed information and supporting evidence such as photographs clearly
               showing the damage or defect.
