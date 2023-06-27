@@ -13,7 +13,6 @@ import {
   Stat,
   StatLabel,
   StatNumber,
-  useColorModeValue,
   Avatar,
   Heading,
   Text,
@@ -67,7 +66,7 @@ export default function BasicStatistics({ order, paymentDetails, users }) {
         py={"5"}
         shadow={"xl"}
         border={"1px solid"}
-        borderColor={useColorModeValue("gray.800", "gray.500")}
+        borderColor={"gray.500"}
         rounded={"lg"}>
         <Flex justifyContent={"space-between"}>
           <Box pl={{ base: 2, md: 4 }}>
@@ -78,7 +77,7 @@ export default function BasicStatistics({ order, paymentDetails, users }) {
               {stat}
             </StatNumber>
           </Box>
-          <Box my={"auto"} color={useColorModeValue("gray.800", "gray.200")} alignContent={"center"}>
+          <Box my={"auto"} color={ "gray.200"} alignContent={"center"}>
             {icon}
           </Box>
         </Flex>
@@ -91,9 +90,9 @@ export default function BasicStatistics({ order, paymentDetails, users }) {
       const matchingItemIds = await Promise.all(
         matchingOrder.itemId.map(async (item) => {
           const product = await fetchProductData(item.id);
-          console.log(item);
           return (
             <Box
+            key={item.id}
               my={4}
               role={"group"}
               p={6}
@@ -146,7 +145,7 @@ export default function BasicStatistics({ order, paymentDetails, users }) {
       setOrderCards(matchingItemIds);
     };
     FetchProducts();
-  }, [users]);
+  }, []);
 
   return (
     <Box maxW='7xl' mx={"auto"} my={10} px={{ base: 2, sm: 12, md: 17 }}>
@@ -179,7 +178,7 @@ export default function BasicStatistics({ order, paymentDetails, users }) {
             <Box
               maxH={"70vh"}
               border={"1px solid"}
-              borderColor={useColorModeValue("gray.800", "gray.500")}
+              borderColor={"gray.500"}
               px={{ base: 2, md: 4 }}
               py={"5"}
               shadow={"xl"}
@@ -228,7 +227,7 @@ export default function BasicStatistics({ order, paymentDetails, users }) {
             </Box>
             <Box
               border={"1px solid"}
-              borderColor={useColorModeValue("gray.800", "gray.500")}
+              borderColor={"gray.500"}
               px={{ base: 2, md: 4 }}
               py={"5"}
               shadow={"xl"}

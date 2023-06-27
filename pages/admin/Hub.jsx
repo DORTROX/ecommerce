@@ -1,7 +1,6 @@
 import { useUserContext } from "@/context/UserSchema";
 import {
   Button,
-  useColorModeValue,
   Box,
   Table,
   Thead,
@@ -53,7 +52,7 @@ export default function Simple() {
   }, []);
 
   return (
-    <Box my={10} align={"center"} justify={"center"} bg={useColorModeValue("gray.50", "gray.800")}>
+    <Box my={10} align={"center"} justify={"center"} bg={"gray.800"}>
       {user.access ? (
         <Box>
           <TableContainer>
