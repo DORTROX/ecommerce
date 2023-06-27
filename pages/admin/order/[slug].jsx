@@ -242,7 +242,7 @@ export default function BasicStatistics({ order, paymentDetails, users }) {
           </SimpleGrid>
         </Box>
       ) : (
-        <Heading textAlign={"center"}>You dot</Heading>
+        <Heading>You dont have access to this page</Heading>
       )}
     </Box>
   );

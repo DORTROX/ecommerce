@@ -57,7 +57,7 @@ export default function Simple() {
         <Box>
           <TableContainer>
             <Table variant='simple'>
-              <TableCaption>Imperial to metric conversion factors</TableCaption>
+              <TableCaption>All the orders with captured / completed payments</TableCaption>
               <Thead>
                 <Tr>
                   <Th>Order Id</Th>
