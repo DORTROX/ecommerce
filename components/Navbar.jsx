@@ -250,7 +250,7 @@ export default function WithSubnavigation() {
                     <MenuItem>
                       <Link href='/user/Account'>Account Settings</Link>
                     </MenuItem>
-                    {user.email == "creativewallsstudio@gmail.com" ? (
+                    {user.access ? (
                       <MenuItem>
                         <Link href='/admin/Hub'>Admin Panel</Link>
                       </MenuItem>

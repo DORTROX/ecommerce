@@ -30,7 +30,7 @@ export default async function UpdateUser(req, res) {
         return res.status(400).json({ error: "LOL" });
       }
       const PayMode = await RazorpayInstance.payments.fetch(req.body.orderId)
-      Orders.create({orderId: req.body.orderId, itemId : req.body.itemId, paymentMode: PayMode.method, Delivered: "Not Delivered", email: req.body.user.email, created_at: Date(PayMode.created_at)})
+      Orders.create({orderId: req.body.orderId, itemId : req.body.itemId, paymentMode: PayMode.method, Delivered: "Not Delivered", email: req.body.user.email, created_at: Date()})
   
       res.send(200);
     } catch (err) {
