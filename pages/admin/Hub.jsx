@@ -49,7 +49,7 @@ export default function Simple() {
 
   useEffect(() => {
     morePayments();
-  }, []);
+  });
 
   return (
     <Box my={10} align={"center"} justify={"center"} bg={"gray.800"}>
@@ -79,6 +79,7 @@ export default function Simple() {
                   pays.map((payments) => {
                     return (
                       <Tr
+                      key={payments.orderId}
                         my={3}
                         maxH={"40vh"}
                         maxW={"70vw"}
