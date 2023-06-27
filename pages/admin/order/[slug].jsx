@@ -86,6 +86,7 @@ export default function BasicStatistics({ order, paymentDetails, users }) {
   }
   useEffect(() => {
     const FetchProducts = async () => {
+      console.log('hi')
       const matchingOrder = users.OrderHistory.find((orders) => orders.orderId === order.orderId);
       const matchingItemIds = await Promise.all(
         matchingOrder.itemId.map(async (item) => {
@@ -145,7 +146,7 @@ export default function BasicStatistics({ order, paymentDetails, users }) {
       setOrderCards(matchingItemIds);
     };
     FetchProducts();
-  });
+  }, [order.id]);
 
   return (
     <Box maxW='7xl' mx={"auto"} my={10} px={{ base: 2, sm: 12, md: 17 }}>
@@ -235,7 +236,6 @@ export default function BasicStatistics({ order, paymentDetails, users }) {
               <Heading textAlign={"center"}>Order</Heading>
               <Divider my={4} />
               <SimpleGrid columns={{ base: 1, md: 2 }} gap={4}>
-                {orderCards}
                 {orderCards}
               </SimpleGrid>
             </Box>
