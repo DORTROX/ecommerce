@@ -7,7 +7,7 @@ import React, { useState, useMemo, useEffect } from "react";
 export default function ProductPage ({products, tagsC, tagsD, tagsM, slug}) {
   const [isSorting, setisSorting] = useState("None");
   const [sortedProducts, setsortedProducts] = useState(products);
-  const [pagination, setPagination] = useState(2);
+  const [pagination, setPagination] = useState(9);
   useEffect(() => {
     return async () => {
       setsortedProducts(products);
@@ -92,7 +92,7 @@ export const getServerSideProps = async ({params: {slug}}) => {
       const colorQuery = slug?.match(/Color=([^|]*)/)?.[1].split(",");
       const materialQuery = slug?.match(/Material=([^|]*)/)?.[1].split(",");  
       if (slug === "All" || slug == undefined) {
-        productsQuery = `*[_type == "product"] [0...2]`;
+        productsQuery = `*[_type == "product"] [0...9]`;
         tagsC = tagsD = tagsM = "";
       } else {
         tagsD = designQuery && designQuery.length ? `(${designQuery.map((val) => `"${val}" in tagsD`).join(" || ")})` : "";

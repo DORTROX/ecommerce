@@ -75,6 +75,7 @@ export default function LargeWithNewsletter() {
             <ListHeader>Support</ListHeader>
             <Link href={"/user/Toc"}>Terms of Service</Link>
             <Link href={"/user/Privacy"}>Privacy Policy</Link>
+            <Link href={'https://merchant.razorpay.com/policy/M6u59YWxuKaIbM/shipping'}>Shipping and delivery</Link>
           </Stack>
           <Stack align={"flex-start"}>
             <ListHeader>Stay up to date</ListHeader>
