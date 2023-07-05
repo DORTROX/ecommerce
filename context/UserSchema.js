@@ -19,57 +19,77 @@ export const UserContext = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
 
-  const successPayemnt = async (orderId, itemId, Buy=false) => {
+  const successPayemnt = async (orderId, itemId, Buy = false) => {
     if (!Buy) {
-      setTotalPrice(0)
-      setCartItems([])
+      setTotalPrice(0);
+      setCartItems([]);
     }
-    await axios.post('/api/userDb/updateOrderHistory', {
+    await axios.post("/api/userDb/updateOrderHistory", {
       orderId: orderId,
       itemId: itemId,
-      user
-    })
-  }
+      user,
+    });
+  };
 
-  const onAdd = async (product, quantity, slug) => {
-    const checkProductInCart = cartItems.find((item) => item._id === product._id);
-    setTotalPrice((prevTotalPrice) => prevTotalPrice + product.price * quantity);
-  
+  const onAdd = async (product, essentials) => {
+    const checkProductInCart = cartItems.find(
+      (item) =>
+        item._id === product._id &&
+        item.essentials.size.width === essentials.size.width &&
+        item.essentials.size.height === essentials.size.height &&
+        item.essentials.Name === essentials.Name
+    );
+    setTotalPrice((prevTotalPrice) => prevTotalPrice + essentials.total);
+
     if (checkProductInCart) {
       const updatedCartItems = cartItems.map((cartProduct) => {
-        if (cartProduct._id === product._id) {
+        if (
+          cartProduct._id === product._id &&
+          cartProduct.essentials.size.width === essentials.size.width &&
+          cartProduct.essentials.size.height === essentials.size.height
+        ) {
           return {
             ...cartProduct,
-            quantity: cartProduct.quantity + quantity,
+            quantity: cartProduct.essentials.quantity + essentials.quantity,
           };
         }
         return cartProduct; // Return the original cartProduct if not updating
       });
       setCartItems(updatedCartItems);
     } else {
-      product.quantity = quantity;
-      setCartItems([...cartItems, { ...product }]);
+      setCartItems([...cartItems, { ...product, essentials }]);
     }
-  
-    await axios.post('/api/userDb/UpdateCart', {
+
+    await axios.post("/api/userDb/UpdateCart", {
       email: user.email,
-      slug: slug,
-      quantity: quantity,
+      slug: product.slug.current,
+      essentials: essentials,
     });
     return;
   };
-  
 
   const onRemove = async (product, slug) => {
     try {
-      let foundProduct = cartItems.find((item) => item._id === product._id);
-      const newCartItems = cartItems.filter((item) => item._id !== product._id);
+      let foundProduct = cartItems.find(
+        (item) =>
+          item._id === product._id &&
+          item.essentials.size.width === product.essentials.size.width &&
+          item.essentials.size.height === product.essentials.size.height &&
+          item.essentials.Name === product.essentials.Name
+      );
+      const newCartItems = cartItems.filter(
+        (i) =>
+          i.essentials.size.width !== product.essentials.size.width ||
+          i.essentials.size.height !== product.essentials.size.height ||
+          i.essentials.total !== product.essentials.total
+      );
 
-      setTotalPrice((prevTotalPrice) => prevTotalPrice - foundProduct.price * foundProduct.quantity);
+      setTotalPrice((prevTotalPrice) => prevTotalPrice - foundProduct.essentials.total);
       setCartItems(newCartItems);
-      await axios.post('/api/userDb/RemoveFromCart', {
+      await axios.post("/api/userDb/RemoveFromCart", {
         email: user.email,
         slug: slug,
+        essentials: foundProduct
       })
     } catch (err) {
       console.log(err);
@@ -104,7 +124,7 @@ export const UserContext = ({ children }) => {
         totalPrice,
         setCartItems,
         setTotalPrice,
-        successPayemnt
+        successPayemnt,
       }}>
       {children}
     </Context.Provider>

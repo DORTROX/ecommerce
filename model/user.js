@@ -24,9 +24,25 @@ const userSchema = new mongoose.Schema({
         slug: {
           type: String,
         },
-        quantity: {
-          type: Number,
-        },
+        essentials: {
+          Name: {
+            type: String
+          },
+          quantity: {
+            type: Number
+          },
+          size : {
+            width: {
+              type: Number
+            },
+            height: {
+              type: Number
+            },
+          },
+          total : {
+            type: Number
+          }
+        }
       },
     ],
     default: [],
@@ -47,7 +63,15 @@ const userSchema = new mongoose.Schema({
           type: [
             {
               id: String,
-              quantity: Number
+              quantity: Number,
+              size: {
+                width: Number,
+                height: Number,
+              },
+              paperPrice: {
+                price: Number,
+                Name: String
+              }
             },
           ],
         },

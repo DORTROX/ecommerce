@@ -66,7 +66,7 @@ export default function LargeWithNewsletter() {
           <Stack align={"flex-start"}>
             <ListHeader>Links</ListHeader>
             <Link href={"/#aboutus"}>About us</Link>
-            <Link _disabled={"true"} href={"#"}>
+            <Link href={"#"}>
               Blog
             </Link>
             <Link href={"#"}>Contact us</Link>

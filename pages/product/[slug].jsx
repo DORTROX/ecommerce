@@ -24,7 +24,10 @@ import {
   ModalBody,
   ModalFooter,
   Textarea,
-  Link
+  Link,
+  FormControl,
+  Select,
+  Input,
 } from "@chakra-ui/react";
 import { BsStar, BsStarFill, BsStarHalf, BsCartPlusFill } from "react-icons/bs";
 import { AiOutlineShoppingCart, AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
@@ -33,27 +36,49 @@ import { useUserContext } from "@/context/UserSchema";
 import { useToast } from "@chakra-ui/react";
 import axios from "axios";
 
+const PaperAndPrice = [
+  {
+    Name: "Arcylic",
+    Price: 5,
+  },
+  { Name: "Aluminium", Price: 50 },
+  { Name: "Blown Vinyl", Price: 100 },
+  { Name: "Epoxy", Price: 10 },
+];
+
 export default function ProductOverView({ product }) {
   const toast = useToast();
-  
 
   const { onAdd, user, successPayemnt } = useUserContext();
   const [index, setindex] = useState(0);
   const [trolly, settrolly] = useState(1);
+  const [wallinfo, setwallinfo] = useState({
+    Name: "",
+    widthS: 0,
+    heightS: 0,
+    Quantity: 1,
+    Price: 0,
+  });
+  const [setTotal, setsetTotal] = useState(0);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const PrizeCalcModalDisclosure = useDisclosure();
+  const [isPrizeCalcModalOpen, setPrizeCalcModalOpen] = useState(false);
+
   const [review, setreview] = useState("");
-  const truncatedContent = product.details.slice(0, 150)
-  const isTruncated = product.details.length > 5
+  const truncatedContent = product.details.slice(0, 150);
+  const isTruncated = product.details.length > 5;
   const makePayment = async (totalPrice, productId) => {
-    if (user.shippingAddress == "" || user.pinCode == ""  || user.City == "") {
+    if (user.shippingAddress == "" || user.pinCode == "" || user.City == "") {
       return toast({
         title: (
-          <Text>Complete Your profile before filling order <Link href={'/user/Account'}>Click here</Link></Text>
+          <Text>
+            Complete Your profile before filling order <Link href={"/user/Account"}>Click here</Link>
+          </Text>
         ),
         status: "error",
         duration: 9000,
-        isClosable: false
-      })
+        isClosable: false,
+      });
     }
     onClose();
     await initializeRazorpay();
@@ -69,11 +94,7 @@ export default function ProductOverView({ product }) {
       description: "By this your order will be confirmed",
       order_id: data.id,
       handler: async function (response) {
-        await successPayemnt(
-          response.razorpay_payment_id,
-          [{id: productId, quantity: 1}],
-          true
-        );
+        await successPayemnt(response.razorpay_payment_id, [{ id: productId, size: {width: wallinfo.widthS, height: wallinfo.heightS}, quantity: wallinfo.Quantity, paperPrice: {price : wallinfo.Price, Name: wallinfo.Name} }], true);
         toast({
           title: "Your order has been filled successfully!",
           status: "success",
@@ -108,6 +129,11 @@ export default function ProductOverView({ product }) {
     });
   }, [product]);
 
+  useEffect(() => {
+    if (wallinfo.Name === "") return;
+    CalculateTotal();
+  }, [wallinfo.Name, wallinfo.Quantity, wallinfo.widthS, wallinfo.heightS]);
+
   function Promotion() {
     return toast({
       title: "You need to sign up to access this feature",
@@ -115,6 +141,12 @@ export default function ProductOverView({ product }) {
       duration: 9000,
       isClosable: true,
     });
+  }
+
+  function CalculateTotal() {
+    const PaperInfo = PaperAndPrice.find((paper) => paper.Name === wallinfo.Name);
+    setwallinfo({...wallinfo, Price : PaperInfo.Price})
+    return setsetTotal(wallinfo.widthS * wallinfo.heightS * PaperInfo.Price * wallinfo.Quantity);
   }
   const [showFullContent, setShowFullContent] = useState(false);
 
@@ -162,6 +194,98 @@ export default function ProductOverView({ product }) {
 
   return (
     <SimpleGrid p={{ base: 0, md: 50 }} gap={5} templateColumns={{ base: "1fr", md: "repeat(2,1fr)" }}>
+      <Modal
+        isCentered
+        onClose={() => {
+          setPrizeCalcModalOpen(false);
+          PrizeCalcModalDisclosure.onClose();
+        }}
+        isOpen={isPrizeCalcModalOpen}
+        motionPreset='slideInBottom'>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader bg={"blackAlpha.400"}>Get your Wallpaper prize</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody gap={5}>
+            <Text>Select Paper Quality</Text>
+            <FormControl>
+              <Select
+                onChange={(e) => {
+                  setwallinfo({ ...wallinfo, Name: e.target.value });
+                }}
+                placeholder='Select Paper'>
+                {PaperAndPrice.map((paper) => {
+                  return <option key={paper.Name} value={paper.Name}>{paper.Name}</option>;
+                })}
+              </Select>
+            </FormControl>
+            <Text>Select Width Sq. Ft</Text>
+            <Input
+              type='number'
+              onChange={(e) => {
+                setwallinfo({ ...wallinfo, widthS: e.target.value });
+              }}
+            />
+            <Text>Select Height Sq. Ft</Text>
+            <Input
+              type='number'
+              onChange={(e) => {
+                setwallinfo({ ...wallinfo, heightS: e.target.value });
+              }}
+            />
+            <Text>Select Quantity</Text>
+            <Input
+              type='number'
+              defaultValue={1}
+              onChange={(e) => {
+                setwallinfo({ ...wallinfo, Quantity: e.target.value });
+              }}
+            />
+          </ModalBody>
+          <ModalFooter gap={5}>
+            Your Total: {setTotal}
+            <Button
+              onClick={() => {
+                makePayment(setTotal, product._id);
+              }}
+              bg={"green"}
+              px={4}
+              color={"white"}
+              rounded={"md"}
+              _hover={{
+                transform: "translateY(-2px)",
+                boxShadow: "lg",
+              }}>
+              Buy now &nbsp; <AiOutlineShoppingCart />
+            </Button>
+            <Button
+              onClick={() => {
+                if (user.name === "Guest") return Promotion();
+                if (wallinfo.Name === "" && wallinfo.Price === 0, wallinfo.Quantity === 0, wallinfo.heightS === 0 && wallinfo.widthS === 0 ) {
+                  return toast({
+                    status:"warning",
+                    description: "Fill out details correctly",
+                    duration: 5000,
+                    title:  "Invalid!"
+                  })
+                };
+                setPrizeCalcModalOpen(false);
+                PrizeCalcModalDisclosure.onClose()
+                onAdd(product,{quantity: parseInt(wallinfo.Quantity), Name: wallinfo.Name, total: setTotal, size: {width: parseInt(wallinfo.widthS), height: parseInt(wallinfo.heightS)}});
+              }}
+              px={4}
+              bg={"white"}
+              color={"black"}
+              rounded={"md"}
+              _hover={{
+                transform: "translateY(-2px)",
+                boxShadow: "lg",
+              }}>
+              Add to cart &nbsp; <BsCartPlusFill />
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
       <Flex w='full' alignItems='center' justifyContent='center'>
         <Box bg={"gray.800"} maxW='sm' borderWidth='1px' rounded='lg' shadow='lg' position='relative'>
           <Image src={urlFor(product.image[0] && product.image[index])} alt={`Picture of ${product.name}`} roundedTop='lg' />
@@ -199,49 +323,12 @@ export default function ProductOverView({ product }) {
           </Box>
         </Box>
         <Box p={5}>
-          <Text fontSize={"xl"}>M.R.P : {product.price}</Text>
-          <Flex justifyContent={{ md: "none", base: "center" }} pt={2} gap={5} alignItems={"center"}>
-            <Button
-              onClick={() => {
-                if (trolly === 1) return;
-                settrolly((prevInt) => prevInt - 1);
-              }}>
-              <AiOutlineMinus />
-            </Button>
-            {trolly}
-            <Button onClick={() => settrolly((prevInt) => prevInt + 1)}>
-              <AiOutlinePlus />{" "}
-            </Button>
-          </Flex>
           <SimpleGrid templateColumns={{ base: "repeat(1fr)", md: "repeat(3, 1fr)" }} py={4} gap={4}>
             <Button
               onClick={() => {
-                makePayment(product.price, product._id)
-              }}
-              bg={"green"}
-              px={4}
-              color={"white"}
-              rounded={"md"}
-              _hover={{
-                transform: "translateY(-2px)",
-                boxShadow: "lg",
+                setPrizeCalcModalOpen(true);
               }}>
-              Buy now &nbsp; <AiOutlineShoppingCart />
-            </Button>
-            <Button
-              onClick={() => {
-                if (user.name === "Guest") return Promotion();
-                onAdd(product, trolly, product.slug.current);
-              }}
-              px={4}
-              bg={"white"}
-              color={"black"}
-              rounded={"md"}
-              _hover={{
-                transform: "translateY(-2px)",
-                boxShadow: "lg",
-              }}>
-              Add to cart &nbsp; <BsCartPlusFill />
+              Get your Prize
             </Button>
             <Button
               onClick={onOpen}
@@ -372,7 +459,7 @@ export default function ProductOverView({ product }) {
   );
 }
 
-export const getServerSideProps = async ({params: {slug}}) => {
+export const getServerSideProps = async ({ params: { slug } }) => {
   const query = `*[_type == "product" && slug.current == '${slug}'][0]`;
 
   const product = await client.fetch(query);

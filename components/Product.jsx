@@ -109,12 +109,6 @@ function ProductAddToCart({ products, tags }) {
                   </Flex>
                   <Flex justifyContent='space-between' alignContent='center'>
                     <Rating rating={parseFloat(product.rating)} numReviews={product.reviews ? product.reviews.length : 0} />
-                    <Box fontSize='2xl' color={"white"}>
-                      <Box as='span' color={"gray.600"} fontSize='lg'>
-                        Rs.
-                      </Box>
-                      {product.price.toFixed(1)}
-                    </Box>
                   </Flex>
                 </Box>
               </Box>

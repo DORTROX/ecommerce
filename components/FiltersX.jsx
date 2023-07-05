@@ -54,11 +54,9 @@ const FiltersX = (props) => {
         </Button>
         <Menu>
           <MenuButton as={Button} rightIcon={<HiChevronDown />}>
-            Price Range
+            Sort By
           </MenuButton>
           <MenuList>
-            <MenuItem onClick={() => props.props("HTL")}>High to Low</MenuItem>
-            <MenuItem onClick={() => props.props("LTH")} >Low to High</MenuItem>
             <MenuItem onClick={() => props.props("MREV")}>Most Reviewed</MenuItem>
             <MenuItem onClick={() => props.props("MRAT")}>Most Rated</MenuItem>
           </MenuList>

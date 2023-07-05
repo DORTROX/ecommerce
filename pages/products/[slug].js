@@ -8,6 +8,7 @@ export default function ProductPage ({products, tagsC, tagsD, tagsM, slug}) {
   const [isSorting, setisSorting] = useState("None");
   const [sortedProducts, setsortedProducts] = useState(products);
   const [pagination, setPagination] = useState(9);
+  
   useEffect(() => {
     return async () => {
       setsortedProducts(products);
@@ -16,8 +17,6 @@ export default function ProductPage ({products, tagsC, tagsD, tagsM, slug}) {
 
   useMemo(() => {
     if (isSorting === "None") return sortedProducts;
-    if (isSorting === "LTH") return sortedProducts.sort((a, b) => a.price - b.price);
-    if (isSorting === "HTL") return sortedProducts.sort((a, b) => b.price - a.price);
     if (isSorting === "MREV") {
       return sortedProducts.sort((a, b) => {
         const aReviewsLength = a.reviews && a.reviews.length;
@@ -38,8 +37,7 @@ export default function ProductPage ({products, tagsC, tagsD, tagsM, slug}) {
       const designQuery = slug.match(/Design=([^|]*)/)?.[1].split(",");
       const colorQuery = slug.match(/Color=([^|]*)/)?.[1].split(",");
       const materialQuery = slug.match(/Material=([^|]*)/)?.[1].split(",");
-      const orderClause = isSorting === "LTH" ? `order(price asc)` : isSorting === "HTL" ? `order(price desc)` : "";
-      orderQuery = orderClause ? `[${pagination}...${pagination + 1 * PAGE_SIZE}] | order(price asc)`:`[${pagination}...${pagination + 1 * PAGE_SIZE}]` ; // Change end index to pagination * PAGE_SIZE
+      orderQuery = `[${pagination}...${pagination + 1 * PAGE_SIZE}]` ; // Change end index to pagination * PAGE_SIZE
       if (slug === "All") {
         productsQuery = `*[_type == "product"] ${orderQuery}`;
         tagsC = tagsD = tagsM = "";

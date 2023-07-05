@@ -18,6 +18,14 @@ const orderSchema = new mongoose.Schema({
       {
         id: String,
         quantity: Number,
+        size: {
+          width: Number,
+          height: Number,
+        },
+        paperPrice: {
+          price: Number,
+          Name: String
+        }
       },
     ],
   },

@@ -80,10 +80,10 @@ export default function BasicStatistics({ order, paymentDetails, users }) {
   }
   useEffect(() => {
     const FetchProducts = async () => {
-      console.log("hi");
       const matchingOrder = users.OrderHistory.find((orders) => orders.orderId === order.orderId);
       const matchingItemIds = await Promise.all(
         matchingOrder.itemId.map(async (item) => {
+          console.log(item)
           const product = await fetchProductData(item.id);
           return (
             <Box
@@ -127,11 +127,12 @@ export default function BasicStatistics({ order, paymentDetails, users }) {
                   {product.name}
                 </Heading>
                 <Stack direction={"row"} align={"center"}>
-                  <Text fontWeight={400} fontSize={"xl"}>
-                    Rs.{product.price}
+                  <Text fontWeight={400} fontSize={"lg"}>
+                    Width : {item.size.width} Height: {item.size.height}
                   </Text>
-                  <Text fontWeight={"800"}>X {item.quantity}</Text>
                 </Stack>
+                <Text fontWeight={"800"}>Quantity: {item.quantity}</Text>
+                <Text fontWeight={"800"}>Paper: {item.paperPrice.Name}</Text>
               </Stack>
             </Box>
           );

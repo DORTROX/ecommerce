@@ -30,7 +30,7 @@ const Layout = ({ children }) => {
             Response.data.cartItems?.map(async (item) => {
               let x = await client.fetch(`*[_type == "product" && slug.current == '${item.slug}'][0]`);
               if (x) {
-                x.quantity = item.quantity;
+                x.essentials = item.essentials;
                 cart.push(x);
               } else {
                 //Do nothings

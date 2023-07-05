@@ -33,11 +33,12 @@ import {
   MenuDivider,
   MenuItem,
   useToast,
+  HStack,
 } from "@chakra-ui/react";
 import { HamburgerIcon, CloseIcon, ChevronDownIcon, ChevronRightIcon } from "@chakra-ui/icons";
 
 import { FiShoppingCart } from "react-icons/fi";
-import React from "react";
+import React, { useEffect } from "react";
 import { useUserContext } from "@/context/UserSchema";
 import { urlFor } from "@/lib/client";
 import axios from "axios";
@@ -48,21 +49,26 @@ function DrawerExample({ func }) {
   const btnRef = React.useRef();
   const { user, cartItems, setTotalPrice, totalPrice, successPayemnt } = useUserContext();
   const toast = useToast();
+  
 
-  if (isOpen) {
-    setTotalPrice(cartItems && cartItems.reduce((total, item) => total + item.price * item.quantity, 0));
-  }
+  useEffect(() => {
+let x = cartItems.map((item) => ({ id: item._id, essentials: item.essentials  }))
+    setTotalPrice(cartItems && cartItems.reduce((total, item) => total + item.essentials.total, 0));
+  }, [cartItems])
+  
 
   const makePayment = async () => {
-    if (user.shippingAddress == "" || user.pinCode == ""  || user.City == "") {
+    if (user.shippingAddress == "" || user.pinCode == "" || user.City == "") {
       return toast({
         title: (
-          <Text>Complete Your profile before filling order <Link href={'/user/Account'}>Click here</Link></Text>
+          <Text>
+            Complete Your profile before filling order <Link href={"/user/Account"}>Click here</Link>
+          </Text>
         ),
         status: "error",
         duration: 9000,
-        isClosable: false
-      })
+        isClosable: false,
+      });
     }
     onClose();
     await initializeRazorpay();
@@ -80,7 +86,7 @@ function DrawerExample({ func }) {
       handler: async function (response) {
         await successPayemnt(
           response.razorpay_payment_id,
-          cartItems.map((item) => ({ id: item._id, quantity: item.quantity }))
+          cartItems.map((item) => ({ id: item._id, size: {width: item.essentials.size.width, height: item.essentials.size.height}, quantity: item.essentials.quantity, paperPrice: {Name: item.essentials.Name}  }))
         );
         toast({
           title: "Your order has been filled successfully!",
@@ -137,11 +143,16 @@ function DrawerExample({ func }) {
                       <SimpleGrid alignItems='center' templateColumns='repeat(3, 1fr)'>
                         <Image borderRadius='10%' w='50%' src={urlFor(item?.image[0])} />
                         <Box>
-                          <h1 style={{ margin: "5% 0 5% 0" }}>{item?.name}</h1>
-                          <p>Quantity: {item?.quantity}</p>
+                          <h1>{item?.name}</h1>
+                          <p>Quantity: {item?.essentials.quantity}</p>
+                          <HStack>
+                            <Text>Width : {item.essentials.size.width}</Text>
+                            <Text>Height; {item.essentials.size.height}</Text>
+                          </HStack>
                         </Box>
                         <Box>
-                          <p>Price: {item?.price} Rs</p>
+                          <p>Price: Rs. {item.essentials.total}</p>
+                          <p>Paper: {item.essentials.Name}</p>
                           <Button my={3} colorScheme='red' mr={2} onClick={() => func(item, item?.slug?.current)}>
                             Remove
                           </Button>
@@ -255,9 +266,9 @@ export default function WithSubnavigation() {
                         <Link href='/admin/Hub'>Admin Panel</Link>
                       </MenuItem>
                     ) : null}
-                    <MenuItem>
+                    <Center>
                       <Button onClick={signOut}>Sign Out</Button>
-                    </MenuItem>
+                    </Center>
                   </MenuList>
                 </Menu>
               );
