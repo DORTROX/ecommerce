@@ -86,7 +86,7 @@ function ProductAddToCart({ products, tags }) {
                 position='relative'>
                 {product.isNew && <Circle size='10px' position='absolute' top={2} right={2} bg='red.200' />}
 
-                <Image src={urlFor(product.image[0])} alt={`Picture of ${product.name}`} roundedTop='lg' />
+                <Image height={'400px'} objectFit={'cover'}  backgroundSize={'contain'} src={urlFor(product.image[0])} alt={`Picture of ${product.name}`} roundedTop='lg' />
                 <Box p='6'>
                   <Box d='flex' alignItems='baseline'>
                     {product.isNew && (

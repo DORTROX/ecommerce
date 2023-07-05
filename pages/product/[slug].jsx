@@ -38,12 +38,18 @@ import axios from "axios";
 
 const PaperAndPrice = [
   {
-    Name: "Arcylic",
-    Price: 5,
+    Name: "Non Woven 260 microns",
+    Price: 49,
   },
-  { Name: "Aluminium", Price: 50 },
-  { Name: "Blown Vinyl", Price: 100 },
-  { Name: "Epoxy", Price: 10 },
+  { Name: "Canvas fabric 400 microns", Price: 75 },
+  { Name: "Embossed nonwoven", Price: 149 },
+  { Name: "Canvas fabric embossed", Price: 199 },
+  { Name: "HD paper", Price: 30 },
+  { Name: "Leather paper", Price: 199 },
+  { Name: "3D Effect  Nonwoven", Price: 75 },
+  { Name: "3D Lemination", Price: 45 },
+  { Name: "Roller Blind", Price: 100 },
+  { Name: "Palmate Blind", Price: 150 },
 ];
 
 export default function ProductOverView({ product }) {
@@ -94,7 +100,18 @@ export default function ProductOverView({ product }) {
       description: "By this your order will be confirmed",
       order_id: data.id,
       handler: async function (response) {
-        await successPayemnt(response.razorpay_payment_id, [{ id: productId, size: {width: wallinfo.widthS, height: wallinfo.heightS}, quantity: wallinfo.Quantity, paperPrice: {price : wallinfo.Price, Name: wallinfo.Name} }], true);
+        await successPayemnt(
+          response.razorpay_payment_id,
+          [
+            {
+              id: productId,
+              size: { width: wallinfo.widthS, height: wallinfo.heightS },
+              quantity: wallinfo.Quantity,
+              paperPrice: { price: wallinfo.Price, Name: wallinfo.Name },
+            },
+          ],
+          true
+        );
         toast({
           title: "Your order has been filled successfully!",
           status: "success",
@@ -145,7 +162,7 @@ export default function ProductOverView({ product }) {
 
   function CalculateTotal() {
     const PaperInfo = PaperAndPrice.find((paper) => paper.Name === wallinfo.Name);
-    setwallinfo({...wallinfo, Price : PaperInfo.Price})
+    setwallinfo({ ...wallinfo, Price: PaperInfo.Price });
     return setsetTotal(wallinfo.widthS * wallinfo.heightS * PaperInfo.Price * wallinfo.Quantity);
   }
   const [showFullContent, setShowFullContent] = useState(false);
@@ -215,7 +232,11 @@ export default function ProductOverView({ product }) {
                 }}
                 placeholder='Select Paper'>
                 {PaperAndPrice.map((paper) => {
-                  return <option key={paper.Name} value={paper.Name}>{paper.Name}</option>;
+                  return (
+                    <option key={paper.Name} value={paper.Name}>
+                      {paper.Name}
+                    </option>
+                  );
                 })}
               </Select>
             </FormControl>
@@ -261,17 +282,24 @@ export default function ProductOverView({ product }) {
             <Button
               onClick={() => {
                 if (user.name === "Guest") return Promotion();
-                if (wallinfo.Name === "" && wallinfo.Price === 0, wallinfo.Quantity === 0, wallinfo.heightS === 0 && wallinfo.widthS === 0 ) {
+                if (
+                  (wallinfo.Name === "" && wallinfo.Price === 0, wallinfo.Quantity === 0, wallinfo.heightS === 0 && wallinfo.widthS === 0)
+                ) {
                   return toast({
-                    status:"warning",
+                    status: "warning",
                     description: "Fill out details correctly",
                     duration: 5000,
-                    title:  "Invalid!"
-                  })
-                };
+                    title: "Invalid!",
+                  });
+                }
                 setPrizeCalcModalOpen(false);
-                PrizeCalcModalDisclosure.onClose()
-                onAdd(product,{quantity: parseInt(wallinfo.Quantity), Name: wallinfo.Name, total: setTotal, size: {width: parseInt(wallinfo.widthS), height: parseInt(wallinfo.heightS)}});
+                PrizeCalcModalDisclosure.onClose();
+                onAdd(product, {
+                  quantity: parseInt(wallinfo.Quantity),
+                  Name: wallinfo.Name,
+                  total: setTotal,
+                  size: { width: parseInt(wallinfo.widthS), height: parseInt(wallinfo.heightS) },
+                });
               }}
               px={4}
               bg={"white"}
