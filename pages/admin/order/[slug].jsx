@@ -83,7 +83,6 @@ export default function BasicStatistics({ order, paymentDetails, users }) {
       const matchingOrder = users.OrderHistory.find((orders) => orders.orderId === order.orderId);
       const matchingItemIds = await Promise.all(
         matchingOrder.itemId.map(async (item) => {
-          console.log(item)
           const product = await fetchProductData(item.id);
           return (
             <Box

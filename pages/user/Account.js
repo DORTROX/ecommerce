@@ -149,13 +149,21 @@ export default function AccountSetting() {
                 <Link key={item} href={`/product/${product.slug.current}`}>
                   <Card minW={"sm"} maxW={"sm"}>
                     <CardBody>
-                      <Image src={urlFor(product.image[0])} alt='Green double couch with wooden legs' borderRadius='lg' />
+                      <Image
+                        height={"400px"}
+                        objectFit={"cover"}
+                        src={urlFor(product.image[0])}
+                        alt='Green double couch with wooden legs'
+                        borderRadius='lg'
+                      />
                       <Stack mt='6' spacing='3'>
                         <Heading size='md'>{product.name}</Heading>
-                        <Text>{product.details.slice(0, 40)}...</Text>
-                        <Text color='blue.600' fontSize='2xl'>
-                          Rs. {product.price}
-                        </Text>
+                        <Text>Paper : {item.paperPrice.Name}</Text>
+                        <HStack>
+                          <Text>Width {item.size.width}</Text>
+                          <Text>Height {item.size.height}</Text>
+                        </HStack>
+                        <Text>Quantity : {item.quantity}</Text>
                       </Stack>
                     </CardBody>
                   </Card>
@@ -163,14 +171,13 @@ export default function AccountSetting() {
               );
             })
           );
-    
+
           return items;
         })
       );
-    
+
       setOrderCards(cards.flat());
     };
-    
 
     fetchOrderCards();
   }, [user]);
