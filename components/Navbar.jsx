@@ -43,79 +43,101 @@ import { useUserContext } from "@/context/UserSchema";
 import { urlFor } from "@/lib/client";
 import axios from "axios";
 import { signOut } from "next-auth/react";
+import getStripe from "@/lib/GetStripe";
 
 function DrawerExample({ func }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = React.useRef();
   const { user, cartItems, setTotalPrice, totalPrice, successPayemnt } = useUserContext();
   const toast = useToast();
-  
 
   useEffect(() => {
-let x = cartItems.map((item) => ({ id: item._id, essentials: item.essentials  }))
+    // let x = cartItems.map((item) => ({ id: item._id, essentials: item.essentials }));
     setTotalPrice(cartItems && cartItems.reduce((total, item) => total + item.essentials.total, 0));
-  }, [cartItems])
-  
+  }, [cartItems]);
 
-  const makePayment = async () => {
-    if (user.shippingAddress == "" || user.pinCode == "" || user.City == "") {
-      return toast({
-        title: (
-          <Text>
-            Complete Your profile before filling order <Link href={"/user/Account"}>Click here</Link>
-          </Text>
-        ),
-        status: "error",
-        duration: 9000,
-        isClosable: false,
-      });
-    }
-    onClose();
-    await initializeRazorpay();
-    const data = await axios
-      .post("/api/Payment/GenerateOrders", {
-        amount: totalPrice,
-      })
-      .then((t) => t.data);
-    const options = {
-      key: process.env.RAZORPAY_KEY,
-      amount: data.amount,
-      currency: data.currency,
-      description: "By this your order will be confirmed",
-      order_id: data.id,
-      handler: async function (response) {
-        await successPayemnt(
-          response.razorpay_payment_id,
-          cartItems.map((item) => ({ id: item._id, size: {width: item.essentials.size.width, height: item.essentials.size.height}, quantity: item.essentials.quantity, paperPrice: {Name: item.essentials.Name}  }))
-        );
-        toast({
-          title: "Your order has been filled successfully!",
-          status: "success",
-          duration: 9000,
-          isClosable: true,
-        });
+  const handleCheckout = async () => {
+    const x = cartItems.map((item) => ({
+      imageRef: item.image[0].asset._ref,
+      name: item.name,
+      total: item.essentials.total,
+      size: { width: item.essentials.size.width, height: item.essentials.size.height },
+      quantity: item.essentials.quantity,
+    }));
+    const stripe = await getStripe();
+    // cartItems.map((item) => ({ id: item._id, size: {width: item.essentials.size.width, height: item.essentials.size.height}, quantity: item.essentials.quantity, paperPrice: {Name: item.essentials.Name}  }))
+    const resp = await axios.post("/api/stripe/", x, {
+      headers: {
+        "Content-Type": "application/json",
       },
-    };
-    const paymentObject = new window.Razorpay(options);
-    paymentObject.open();
-  };
-
-  const initializeRazorpay = () => {
-    return new Promise((resolve) => {
-      const script = document.createElement("script");
-      script.src = "https://checkout.razorpay.com/v1/checkout.js";
-      // document.body.appendChild(script);
-
-      script.onload = () => {
-        resolve(true);
-      };
-      script.onerror = () => {
-        resolve(false);
-      };
-
-      document.body.appendChild(script);
     });
+
+    if (resp.status === 500) return;
+    console.log(resp);
+    stripe.redirectToCheckout({ sessionId: resp.data.id });
   };
+
+  // This all falls under the razor pay system apparently this system works fine but the onboarding is paused ;-;.
+
+  // const makePayment = async () => {
+  //   if (user.shippingAddress == "" || user.pinCode == "" || user.City == "") {
+  //     return toast({
+  //       title: (
+  //         <Text>
+  //           Complete Your profile before filling order <Link href={"/user/Account"}>Click here</Link>
+  //         </Text>
+  //       ),
+  //       status: "error",
+  //       duration: 9000,
+  //       isClosable: false,
+  //     });
+  //   }
+  //   onClose();
+  //   await initializeRazorpay();
+  //   const data = await axios
+  //     .post("/api/Payment/GenerateOrders", {
+  //       amount: totalPrice,
+  //     })
+  //     .then((t) => t.data);
+  //   const options = {
+  //     key: process.env.RAZORPAY_KEY,
+  //     amount: data.amount,
+  //     currency: data.currency,
+  //     description: "By this your order will be confirmed",
+  //     order_id: data.id,
+  //     handler: async function (response) {
+  //       await successPayemnt(
+  //         response.razorpay_payment_id,
+  //         cartItems.map((item) => ({ id: item._id, size: {width: item.essentials.size.width, height: item.essentials.size.height}, quantity: item.essentials.quantity, paperPrice: {Name: item.essentials.Name}  }))
+  //       );
+  //       toast({
+  //         title: "Your order has been filled successfully!",
+  //         status: "success",
+  //         duration: 9000,
+  //         isClosable: true,
+  //       });
+  //     },
+  //   };
+  //   const paymentObject = new window.Razorpay(options);
+  //   paymentObject.open();
+  // };
+
+  // const initializeRazorpay = () => {
+  //   return new Promise((resolve) => {
+  //     const script = document.createElement("script");
+  //     script.src = "https://checkout.razorpay.com/v1/checkout.js";
+  //     // document.body.appendChild(script);
+
+  //     script.onload = () => {
+  //       resolve(true);
+  //     };
+  //     script.onerror = () => {
+  //       resolve(false);
+  //     };
+
+  //     document.body.appendChild(script);
+  //   });
+  // };
 
   return (
     <>
@@ -176,7 +198,7 @@ let x = cartItems.map((item) => ({ id: item._id, essentials: item.essentials  })
                 <Button variant='outline' mr={3} onClick={onClose}>
                   Cancel
                 </Button>
-                <Button onClick={makePayment} colorScheme='blue'>
+                <Button onClick={handleCheckout} colorScheme='blue'>
                   Buy Now
                 </Button>
               </Box>
