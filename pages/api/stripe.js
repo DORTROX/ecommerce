@@ -1,6 +1,6 @@
 import Stripe from "stripe";
 
-const stripe = new Stripe(process.env.NEXT_PUBLIC_StripeSecrectKey);
+const stripe = new Stripe("sk_test_51NSgA4SBqqSD6EP2N5G8y6YHt3SuaWZ6tjVxH5KJX59GD5e0Qik4BaxCABsQ5GddJIFZVtp0CV11FZqyLOqI5eHh0019C2ouza");
 
 export default async function handler(req, res) {
 
