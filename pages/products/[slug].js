@@ -8,7 +8,7 @@ export default function ProductPage ({products, tagsC, tagsD, tagsM, slug}) {
   const [isSorting, setisSorting] = useState("None");
   const [sortedProducts, setsortedProducts] = useState(products);
   const [pagination, setPagination] = useState(9);
-  
+
   useEffect(() => {
     return async () => {
       setsortedProducts(products);

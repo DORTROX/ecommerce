@@ -4,6 +4,7 @@ import { useState, createContext, useContext } from "react";
 const Context = createContext();
 
 export const UserContext = ({ children }) => {
+
   const [user, setUser] = useState({
     id: "",
     name: "Guest",
@@ -19,14 +20,14 @@ export const UserContext = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
 
-  const successPayemnt = async (orderId, itemId, Buy = false) => {
+  const successPayemnt = async (orderId, payMethod, Buy = false) => {
     if (!Buy) {
       setTotalPrice(0);
       setCartItems([]);
     }
     await axios.post("/api/userDb/updateOrderHistory", {
       orderId: orderId,
-      itemId: itemId,
+      payMethod,
       user,
     });
   };

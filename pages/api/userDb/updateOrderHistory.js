@@ -6,12 +6,19 @@ import User from "@/model/user";
 async function searchByEmail(userp) {
   try {
     const user = await User.findOne({ email: userp.user.email });
+    const cartToEmpty = await user.cartItems.map((item) => ({
+      id: item.slug,
+      size: { width: item.essentials.size.width, height: item.essentials.size.height },
+      quantity: item.essentials.quantity,
+      paperPrice: { Name: item.essentials.Name },
+    }))
 
     if (!user) {
       return false;
     }
 
-    user.OrderHistory.push({orderId: userp.orderId, itemId: userp.itemId, Delivered: "Not Delivered"})
+    user.OrderHistory.push({orderId: userp.orderId, itemId: cartToEmpty, Delivered: "Not Delievered"})
+    Orders.create({orderId: userp.orderId, itemId : cartToEmpty, paymentMode: cartToEmpty.payMethod, Delivered: "Not Delivered", email: userp.user.email, created_at: Date()})
     user.cartItems = []
     await user.save();
 
@@ -27,14 +34,12 @@ export default async function UpdateUser(req, res) {
       
       const userExists = await searchByEmail(req.body);
       if (!userExists) {
-        return res.status(400).json({ error: "LOL" });
+        return res.status(400).json({ error: "User not foudn" });
       }
-      const PayMode = await RazorpayInstance.payments.fetch(req.body.orderId)
-      Orders.create({orderId: req.body.orderId, itemId : req.body.itemId, paymentMode: PayMode.method, Delivered: "Not Delivered", email: req.body.user.email, created_at: Date()})
-  
       res.send(200);
     } catch (err) {
-      res.status(500).json({ error: err }); // Send an error response
+      console.log(err)
+      res.status(200).json({ error: err }); // Send an error response
     }
   }
   

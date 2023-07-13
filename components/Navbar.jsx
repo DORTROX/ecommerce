@@ -52,7 +52,6 @@ function DrawerExample({ func }) {
   const toast = useToast();
 
   useEffect(() => {
-    // let x = cartItems.map((item) => ({ id: item._id, essentials: item.essentials }));
     setTotalPrice(cartItems && cartItems.reduce((total, item) => total + item.essentials.total, 0));
   }, [cartItems]);
 
@@ -65,15 +64,13 @@ function DrawerExample({ func }) {
       quantity: item.essentials.quantity,
     }));
     const stripe = await getStripe();
-    // cartItems.map((item) => ({ id: item._id, size: {width: item.essentials.size.width, height: item.essentials.size.height}, quantity: item.essentials.quantity, paperPrice: {Name: item.essentials.Name}  }))
-    const resp = await axios.post("/api/stripe/", x, {
+    const resp = await axios.post("/api/stripe", {x, email: user.email}, {
       headers: {
         "Content-Type": "application/json",
       },
     });
 
     if (resp.status === 500) return;
-    console.log(resp);
     stripe.redirectToCheckout({ sessionId: resp.data.id });
   };
 

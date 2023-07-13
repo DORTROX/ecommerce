@@ -61,7 +61,6 @@ export default function Simple() {
               <Thead>
                 <Tr>
                   <Th>Order Id</Th>
-                  <Th>Payment Mode</Th>
                   <Th>Email</Th>
                   <Th>Delivered</Th>
                   <Th>Created At</Th>
@@ -91,7 +90,6 @@ export default function Simple() {
                         <Td>
                           <Link href={`/admin/order/${payments.orderId}`}>{payments.orderId}</Link>
                         </Td>
-                        <Td>{payments.paymentMode}</Td>
                         <Td>{payments.email}</Td>
                         <Td>
                           <Select onChange={(e) => updatePayments(payments.orderId, e.target.value)} defaultValue={payments.Delivered}>

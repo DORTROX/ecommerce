@@ -46,7 +46,7 @@ import { useState, useEffect } from "react";
 // import { toast } from "react-hot-toast";
 
 const fetchProductData = async (itemId) => {
-  const query = `*[_type == "product" && _id == '${itemId}'][0]`;
+  const query = `*[_type == "product" && slug.current == '${itemId}'][0]`;
   const product = await client.fetch(query);
   return product;
 };

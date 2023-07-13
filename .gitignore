@@ -34,3 +34,5 @@ yarn-error.log*
 
 /creativewallpapers-dashboard
 .vscode/settings.json
+/pages/api/Payment/GenerateBuyOrder.js
+/pages/api/Payment/GenerateOrders.js

@@ -57,7 +57,6 @@ export default function ProductOverView({ product }) {
 
   const { onAdd, user, successPayemnt } = useUserContext();
   const [index, setindex] = useState(0);
-  const [trolly, settrolly] = useState(1);
   const [wallinfo, setwallinfo] = useState({
     Name: "",
     widthS: 0,

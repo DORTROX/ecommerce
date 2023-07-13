@@ -41,7 +41,6 @@ const FiltersX = (props) => {
     <>
       <Flex
         py={5}
-        // display={{ base: "block", md: "flex" }}
         alignItems={"center"}
         justifyContent={"space-around"}
       >

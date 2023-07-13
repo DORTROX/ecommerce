@@ -36,7 +36,8 @@ const Layout = ({ children }) => {
                 //Do nothings
               }
             });
-            setCartItems(cart);
+            await setCartItems(cart);
+            
           }
           if (user.name == "Guest") {
             await setUser({

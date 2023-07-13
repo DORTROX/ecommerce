@@ -1,6 +1,4 @@
-// import { useUserContext } from "@/context/UserSchema";
 import { useUserContext } from "@/context/UserSchema";
-import { RazorpayInstance } from "@/lib/RazorPay";
 import { client, urlFor } from "@/lib/client";
 import { connectMongo } from "@/lib/connectMongo";
 import Orders from "@/model/Orders";
@@ -34,13 +32,17 @@ import { useEffect, useState } from "react";
 import { BsFillCreditCard2FrontFill } from "react-icons/bs";
 import { GiPayMoney } from "react-icons/gi";
 import { TbTruckDelivery } from "react-icons/tb";
+const stripe = require("stripe")(process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY);
+
 const fetchProductData = async (itemId) => {
-  const query = `*[_type == "product" && _id == '${itemId}'][0]`;
+  const query = `*[_type == "product" && slug.current == '${itemId}'][0]`;
   const product = await client.fetch(query);
   return product;
 };
 
+
 export default function BasicStatistics({ order, paymentDetails, users }) {
+  const [shipRate, setshipRate] = useState('')
   const { user } = useUserContext();
   const [orderCards, setOrderCards] = useState([]);
   const toast = useToast();
@@ -80,6 +82,8 @@ export default function BasicStatistics({ order, paymentDetails, users }) {
   }
   useEffect(() => {
     const FetchProducts = async () => {
+      let x = await stripe.shippingRates.retrieve(paymentDetails.shipping_cost.shipping_rate)
+      setshipRate(x.display_name)
       const matchingOrder = users.OrderHistory.find((orders) => orders.orderId === order.orderId);
       const matchingItemIds = await Promise.all(
         matchingOrder.itemId.map(async (item) => {
@@ -153,10 +157,9 @@ export default function BasicStatistics({ order, paymentDetails, users }) {
             {order.orderId}
           </chakra.h1>
           <Divider my={4} />
-
           <SimpleGrid my={5} columns={{ base: 1, md: 3 }} spacing={{ base: 5, lg: 8 }}>
-            <StatsCard title={"Payment Mode"} stat={order.paymentMode} icon={<BsFillCreditCard2FrontFill size={"3em"} />} />
-            <StatsCard title={"Total Amount"} stat={paymentDetails.amount / 100} icon={<GiPayMoney size={"3em"} />} />
+            <StatsCard title={"Shipping Type"} stat={shipRate} icon={<BsFillCreditCard2FrontFill size={"3em"} />} />
+            <StatsCard title={"Total Amount"} stat={paymentDetails.amount_total/ 100  + " rs"} icon={<GiPayMoney size={"3em"} />} />
             <StatsCard
               title={"Delivery Status"}
               stat={
@@ -234,7 +237,7 @@ export default function BasicStatistics({ order, paymentDetails, users }) {
 export async function getServerSideProps({ params: { slug } }) {
   await connectMongo();
   const order = await Orders.findOne({ orderId: slug });
-  const paymentDetails = await RazorpayInstance.payments.fetch(slug);
+  const paymentDetails = await stripe.checkout.sessions.retrieve(slug);
   const serializedPaymentDetails = JSON.parse(JSON.stringify(paymentDetails));
   const serializedOrder = JSON.parse(JSON.stringify(order));
   const users = await User.findOne({ email: order.email });
