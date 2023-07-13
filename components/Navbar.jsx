@@ -449,7 +449,7 @@ const NAV_ITEMS = [
   {
     label: "Contact Us",
     children: [
-      { label: "Phone", subLabel: "Make a phone call today!", href: "tel:+918800179641" },
+      { label: "Phone", subLabel: "Make a phone call today!", href: "tel:+918368782252" },
       { label: "Email", subLabel: "Write us a email", href: "mailto:creativewallsstudio@gmail.com" },
       {
         label: "Visit Us",
