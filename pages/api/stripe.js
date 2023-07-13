@@ -8,7 +8,7 @@ export default async function handler(req, res) {
         submit_type: "pay",
         mode: "payment",
         billing_address_collection: "auto",
-        shipping_options: [{ shipping_rate: "shr_1NTHlzSBqqSD6EP2xUzDzoHv" }, { shipping_rate: "shr_1NTHn6SBqqSD6EP29dgpNPHi" },{ shipping_rate: "shr_1NTIDHSBqqSD6EP2wIqRGq9X" }],
+        shipping_options: [{ shipping_rate: "shr_1NTHlzSBqqSD6EP2xUzDzoHv" }, { shipping_rate: "shr_1NTHn6SBqqSD6EP29dgpNPHi" }],
         line_items: req.body.x.map((item) => {
           const img = item.imageRef.replace("image-", "https://cdn.sanity.io/images/g80wq38r/production/").replace("-jpg", ".jpg");
           return {
