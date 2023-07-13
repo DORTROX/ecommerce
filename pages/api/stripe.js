@@ -18,7 +18,7 @@ export default async function handler(req, res) {
                 name: `${item.name} ${item.size.width} X ${item.size.height} QTY: ${item.quantity}`,
                 images: [img],
               },
-              unit_amount: 1*100,
+              unit_amount: item.total *100,
             },
             quantity: 1,
           };
